@@ -12,5 +12,6 @@ urlpatterns = [
     url(r'^admin/', include(wagtailadmin_urls)),
     url(r'', include(wagtail_urls)),
     #  For media serving
-    url(r'^%s(?P<path>.*)$' % re.escape(settings.MEDIA_URL.lstrip('/')), serve, kwargs={'document_root': settings.MEDIA_ROOT})
+    url(r'^%s(?P<path>.*)$' % re.escape(
+        settings.MEDIA_URL.lstrip('/')), serve, kwargs={'document_root': settings.MEDIA_ROOT})
 ]

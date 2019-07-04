@@ -69,8 +69,7 @@ class RemoteStorage(FileSystemStorage):
                 else:
                     # This fun binary flag incantation makes os.open throw an
                     # OSError if the file already exists before we open it.
-                    flags = (os.O_WRONLY | os.O_CREAT | os.O_EXCL |
-                             getattr(os, 'O_BINARY', 0))
+                    flags = (os.O_WRONLY | os.O_CREAT | os.O_EXCL | getattr(os, 'O_BINARY', 0))
                     # The current umask value is masked out by os.open!
                     fd = os.open(full_path, flags, 0o666)
                     _file = None
