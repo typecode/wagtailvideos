@@ -20,7 +20,7 @@ setup(
     install_requires=[
         'wagtail>=2.0',
         'Django>=1.11',
-        'django-enumchoicefield==1.0.0',
+        'django-enumchoicefield==1.1.0',
     ],
     extras_require={
         'testing': [
