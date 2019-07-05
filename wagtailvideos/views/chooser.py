@@ -6,6 +6,7 @@ from wagtail.admin.forms.search import SearchForm
 from wagtail.admin.modal_workflow import render_modal_workflow
 from wagtail.admin.utils import PermissionPolicyChecker, popular_tags_for_model
 from wagtail.core.models import Collection
+from wagtail.images.views.chooser import get_chooser_js_data
 from wagtail.search import index as search_index
 from wagtail.utils.pagination import paginate
 
@@ -22,14 +23,14 @@ def get_video_json(video):
     image chooser panel
     """
 
-    return json.dumps({
+    return {
         'id': video.id,
         'edit_link': reverse('wagtailvideos:edit', args=(video.id,)),
         'title': video.title,
         'preview': {
             'url': video.thumbnail.url if video.thumbnail else '',
         }
-    })
+    }
 
 
 def chooser(request):
@@ -79,7 +80,7 @@ def chooser(request):
 
         paginator, videos = paginate(request, videos, per_page=12)
 
-    return render_modal_workflow(request, 'wagtailvideos/chooser/chooser.html', 'wagtailvideos/chooser/chooser.js', {
+    return render_modal_workflow(request, 'wagtailvideos/chooser/chooser.html', None, {
         'videos': videos,
         'uploadform': uploadform,
         'searchform': searchform,
@@ -87,16 +88,17 @@ def chooser(request):
         'query_string': q,
         'popular_tags': popular_tags_for_model(Video),
         'collections': collections,
-    })
+    }, json_data=get_chooser_js_data())
 
 
 def video_chosen(request, video_id):
     video = get_object_or_404(Video, id=video_id)
 
     return render_modal_workflow(
-        request, None, 'wagtailvideos/chooser/video_chosen.js',
-        {'video_json': get_video_json(video)}
-    )
+        request, None, json_data={
+            'step': 'video_chosen',
+            'result': get_video_json(video)
+        })
 
 
 @permission_checker.require('add')
