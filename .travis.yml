@@ -5,9 +5,7 @@ dist: trusty
 env:
   global:
     - DJANGO_SETTINGS_MODULE="tests.app.settings"
-    - TOX_ENV=
-  matrix:
-    - TOX_ENV=flake8,isort
+
 
 matrix:
   include:
@@ -27,7 +25,9 @@ matrix:
       python: 3.6
     - env: TOXENV=py36-dj21-wt25
       python: 3.6
-    - env: TOX_ENV='flake8,isort'
+    - env: TOXENV=py36-dj22-wt25
+      python: 3.6
+    - env: TOXENV='flake8,isort'
       python: 3.5
 
 before_install:
