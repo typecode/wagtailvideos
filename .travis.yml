@@ -1,29 +1,44 @@
 language: python
 cache: pip
-dist: xenial
+dist: trusty
 
 env:
   global:
     - DJANGO_SETTINGS_MODULE="tests.app.settings"
-    - TOX_ENV=
-  matrix:
-    - TOX_ENV=flake8,isort
-
-
-python:
-  - 3.5
-  - 3.6
-
-env:
-  - DJANGO='20' WAGTAIL='24'
-  - DJANGO='20' WAGTAIL='25'
-  - DJANGO='21' WAGTAIL='24'
-  - DJANGO='21' WAGTAIL='25'
-  - DJANGO='22' WAGTAIL='25'
-
 
 matrix:
   include:
+    - env: TOXENV=py35-dj20-wt24
+      python: 3.5
+    - env: TOXENV=py35-dj21-wt24
+      python: 3.5
+    - env: TOXENV=py36-dj20-wt24
+      python: 3.6
+    - env: TOXENV=py36-dj21-wt24
+      python: 3.6
+    - env: TOXENV=py37-dj20-wt24
+      python: 3.7
+      dist: xenial
+    - env: TOXENV=py37-dj21-wt24
+      python: 3.7
+      dist: xenial
+    - env: TOXENV=py35-dj20-wt25
+      python: 3.5
+    - env: TOXENV=py35-dj21-wt25
+      python: 3.5
+    - env: TOXENV=py36-dj20-wt25
+      python: 3.6
+    - env: TOXENV=py36-dj21-wt25
+      python: 3.6
+    - env: TOXENV=py37-dj20-wt25
+      python: 3.7
+      dist: xenial
+    - env: TOXENV=py37-dj21-wt25
+      python: 3.7
+      dist: xenial
+    - env: TOXENV=py37-dj22-wt25
+      python: 3.7
+      dist: xenial
     - env: TOX_ENV='flake8,isort'
       python: 3.5
 
@@ -42,6 +57,4 @@ cache:
     - $HOME/virtualenv
 
 script:
-  # Run tox using either a specific environment from TOX_ENV,
-  # or building one from the environment variables
-  - tox -e "${TOX_ENV:-py${TRAVIS_PYTHON_VERSION/./}-dj${DJANGO}-wt${WAGTAIL}}"
+  - tox
