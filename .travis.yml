@@ -5,6 +5,7 @@ dist: trusty
 env:
   global:
     - DJANGO_SETTINGS_MODULE="tests.app.settings"
+    - TOX_ENV=
   matrix:
     - TOX_ENV=flake8,isort
 
@@ -18,14 +19,6 @@ matrix:
       python: 3.6
     - env: TOXENV=py36-dj21-wt24
       python: 3.6
-    - env: TOXENV=py37-dj20-wt24
-      python: 3.7
-      sudo: true
-      dist: xenial
-    - env: TOXENV=py37-dj21-wt24
-      python: 3.7
-      dist: xenial
-      sudo: true
     - env: TOXENV=py35-dj20-wt25
       python: 3.5
     - env: TOXENV=py35-dj21-wt25
@@ -34,18 +27,6 @@ matrix:
       python: 3.6
     - env: TOXENV=py36-dj21-wt25
       python: 3.6
-    - env: TOXENV=py37-dj20-wt25
-      python: 3.7
-      dist: xenial
-      sudo: true
-    - env: TOXENV=py37-dj21-wt25
-      python: 3.7
-      dist: xenial
-      sudo: true
-    - env: TOXENV=py37-dj22-wt25
-      python: 3.7
-      dist: xenial
-      sudo: true
     - env: TOX_ENV='flake8,isort'
       python: 3.5
 
