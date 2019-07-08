@@ -1,6 +1,12 @@
 CHANGELOG
 =========
 
+2.4.0
+-----
+
+- Upped minimum wagtail to 2.4
+
+
 2.0.0
 -----
 
