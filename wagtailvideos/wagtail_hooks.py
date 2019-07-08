@@ -1,7 +1,6 @@
 from django.conf.urls import include, url
-from django.contrib.staticfiles.templatetags.staticfiles import static
 from django.urls import reverse
-from django.utils.html import format_html, format_html_join
+from django.utils.html import format_html
 from django.utils.translation import ugettext_lazy as _
 from wagtail.admin.menu import MenuItem
 from wagtail.core import hooks
@@ -19,14 +18,7 @@ def register_admin_urls():
 
 @hooks.register('insert_editor_js')
 def editor_js():
-    js_files = [
-        static('wagtailvideos/js/video-chooser.js'),
-    ]
-    js_includes = format_html_join(
-        '\n', '<script src="{0}"></script>',
-        ((filename, ) for filename in js_files)
-    )
-    return js_includes + format_html(
+    return format_html(
         """
         <script>
             window.chooserUrls.videoChooser = '{0}';

@@ -1,29 +1,33 @@
 language: python
 cache: pip
+dist: trusty
 
 env:
   global:
     - DJANGO_SETTINGS_MODULE="tests.app.settings"
-    - TOX_ENV=
-  matrix:
-    - TOX_ENV=flake8,isort
-
-
-python:
-  - 3.4
-  - 3.5
-  - 3.6
-
-env:
-  - DJANGO='111' WAGTAIL='20'
-  - DJANGO='111' WAGTAIL='21'
-  - DJANGO='20' WAGTAIL='20'
-  - DJANGO='20' WAGTAIL='21'
 
 
 matrix:
   include:
-    - env: TOX_ENV='flake8,isort'
+    - env: TOXENV=py35-dj20-wt24
+      python: 3.5
+    - env: TOXENV=py35-dj21-wt24
+      python: 3.5
+    - env: TOXENV=py36-dj20-wt24
+      python: 3.6
+    - env: TOXENV=py36-dj21-wt24
+      python: 3.6
+    - env: TOXENV=py35-dj20-wt25
+      python: 3.5
+    - env: TOXENV=py35-dj21-wt25
+      python: 3.5
+    - env: TOXENV=py36-dj20-wt25
+      python: 3.6
+    - env: TOXENV=py36-dj21-wt25
+      python: 3.6
+    # - env: TOXENV=py36-dj22-wt25
+      # python: 3.6
+    - env: TOXENV='flake8,isort'
       python: 3.5
 
 before_install:
@@ -41,6 +45,4 @@ cache:
     - $HOME/virtualenv
 
 script:
-  # Run tox using either a specific environment from TOX_ENV,
-  # or building one from the environment variables
-  - tox -e "${TOX_ENV:-py${TRAVIS_PYTHON_VERSION/./}-dj${DJANGO}-wt${WAGTAIL}}"
+  - tox
