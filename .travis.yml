@@ -25,8 +25,8 @@ matrix:
       python: 3.6
     - env: TOXENV=py36-dj21-wt25
       python: 3.6
-    - env: TOXENV=py36-dj22-wt25
-      python: 3.6
+    # - env: TOXENV=py36-dj22-wt25
+      # python: 3.6
     - env: TOXENV='flake8,isort'
       python: 3.5
 
