@@ -4,9 +4,9 @@ from django.template.loader import render_to_string
 from django.utils.encoding import force_text
 from django.views.decorators.http import require_POST
 from django.views.decorators.vary import vary_on_headers
+
 from wagtail.admin.utils import PermissionPolicyChecker
 from wagtail.search.backends import get_search_backends
-
 from wagtailvideos.forms import get_video_form
 from wagtailvideos.models import Video
 from wagtailvideos.permissions import permission_policy

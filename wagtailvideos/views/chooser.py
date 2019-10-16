@@ -8,7 +8,6 @@ from wagtail.admin.utils import PermissionPolicyChecker, popular_tags_for_model
 from wagtail.core.models import Collection
 from wagtail.images.views.chooser import get_chooser_js_data
 from wagtail.search import index as search_index
-
 from wagtailvideos.forms import get_video_form
 from wagtailvideos.models import Video
 from wagtailvideos.permissions import permission_policy
@@ -40,8 +39,8 @@ def chooser(request):
 
     q = None
     if (
-        'q' in request.GET or 'p' in request.GET or 'tag' in request.GET
-        or 'collection_id' in request.GET
+            'q' in request.GET or 'p' in request.GET or 'tag' in request.GET
+            or 'collection_id' in request.GET
     ):
         # this request is triggered from search, pagination or 'popular tags';
         # we will just render the results.html fragment

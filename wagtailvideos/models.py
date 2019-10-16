@@ -20,13 +20,13 @@ from django.urls import reverse
 from django.utils.encoding import python_2_unicode_compatible
 from django.utils.html import mark_safe
 from django.utils.translation import ugettext_lazy as _
+
 from enumchoicefield import ChoiceEnum, EnumChoiceField
 from taggit.managers import TaggableManager
 from wagtail.admin.utils import get_object_usage
 from wagtail.core.models import CollectionMember
 from wagtail.search import index
 from wagtail.search.queryset import SearchableQuerySetMixin
-
 from wagtailvideos import ffmpeg
 
 logger = logging.getLogger(__name__)
