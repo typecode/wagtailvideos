@@ -1,6 +1,6 @@
+from django.core.paginator import Paginator
 from django.shortcuts import get_object_or_404, render
 from django.urls import reverse
-from django.core.paginator import Paginator
 
 from wagtail.admin.forms.search import SearchForm
 from wagtail.admin.modal_workflow import render_modal_workflow
@@ -8,7 +8,6 @@ from wagtail.admin.utils import PermissionPolicyChecker, popular_tags_for_model
 from wagtail.core.models import Collection
 from wagtail.images.views.chooser import get_chooser_js_data
 from wagtail.search import index as search_index
-# from wagtail.utils.pagination import paginate
 
 from wagtailvideos.forms import get_video_form
 from wagtailvideos.models import Video
@@ -64,7 +63,6 @@ def chooser(request):
                 videos = videos.filter(tags__name=tag_name)
 
         # Pagination
-        # paginator, videos = paginate(request, videos, per_page=12)
         paginator = Paginator(videos, per_page=12)
         page = paginator.get_page(request.GET.get('p'))
 
@@ -80,7 +78,6 @@ def chooser(request):
         if len(collections) < 2:
             collections = None
 
-        # paginator, videos = paginate(request, videos, per_page=12)
         paginator = Paginator(videos, per_page=12)
         page = paginator.get_page(request.GET.get('p'))
 
@@ -132,7 +129,6 @@ def chooser_upload(request):
         form = VideoForm()
 
     videos = Video.objects.order_by('title')
-    # paginator, videos = paginate(request, videos, per_page=12)
     paginator = Paginator(videos, per_page=12)
     page = paginator.get_page(request.GET.get('p'))
 
