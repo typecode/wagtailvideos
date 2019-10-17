@@ -6,7 +6,7 @@ Install wagtailvideos using setuptools
 with open('README.rst', 'r') as f:
     readme = f.read()
 
-from setuptools import find_packages, setup     # noqa: E4
+from setuptools import find_packages, setup  # noqa: E4
 
 setup(
     name='wagtailvideos',

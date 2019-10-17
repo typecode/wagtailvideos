@@ -1,4 +1,4 @@
-from tests.app.settings import *    # noqa: F401,F403
+from tests.app.settings import *  # noqa: F401,F403
 
 DATABASES = {
     'default': {
