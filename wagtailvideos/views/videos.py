@@ -1,16 +1,14 @@
+from django.core.paginator import Paginator
 from django.http import HttpResponseNotAllowed
 from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse
 from django.utils.translation import ugettext as _
 from django.views.decorators.vary import vary_on_headers
-from django.core.paginator import Paginator
-
 from wagtail.admin import messages
 from wagtail.admin.forms.search import SearchForm
 from wagtail.admin.utils import PermissionPolicyChecker, popular_tags_for_model
 from wagtail.core.models import Collection
 from wagtail.search.backends import get_search_backends
-# from wagtail.utils.pagination import paginate
 
 from wagtailvideos import ffmpeg
 from wagtailvideos.forms import VideoTranscodeAdminForm, get_video_form
@@ -47,7 +45,6 @@ def index(request):
         except (ValueError, Collection.DoesNotExist):
             pass
 
-    # paginator, videos = paginate(request, videos)
     paginator = Paginator(videos, per_page=25)
     page = paginator.get_page(request.GET.get('p'))
 
@@ -184,7 +181,6 @@ def add(request):
 def usage(request, image_id):
     image = get_object_or_404(Video, id=image_id)
 
-    # paginator, used_by = paginate(request, image.get_usage())
     paginator = Paginator(image.get_usage(), per_page=12)
     page = paginator.get_page(request.GET.get('p'))
 
