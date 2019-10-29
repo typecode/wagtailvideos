@@ -2,9 +2,9 @@ from django.conf.urls import include, url
 from django.urls import reverse
 from django.utils.html import format_html
 from django.utils.translation import ugettext_lazy as _
-
 from wagtail.admin.menu import MenuItem
 from wagtail.core import hooks
+
 from wagtailvideos import urls
 from wagtailvideos.forms import GroupVideoPermissionFormSet
 
