@@ -10,12 +10,12 @@ from setuptools import find_packages, setup  # noqa: E4
 
 setup(
     name='wagtailvideos',
-    version='2.4.0',
+    version='2.4.1',
     description="A wagtail module for uploading and displaying videos in various codecs.",
     long_description=readme,
-    author='Takeflight',
-    author_email='developers@takeflight.com.au',
-    url='https://github.com/takeflight/wagtailvideos',
+    author='Neon Jungle',
+    author_email='developers@neonjungle.studio',
+    url='https://github.com/neon-jungle/wagtailvideos',
 
     install_requires=[
         'wagtail>=2.4',
@@ -34,8 +34,6 @@ setup(
 
     include_package_data=True,
     package_data={},
-
-
 
     classifiers=[
         'Environment :: Web Environment',
