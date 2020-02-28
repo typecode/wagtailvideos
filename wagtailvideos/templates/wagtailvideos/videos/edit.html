@@ -1,6 +1,6 @@
 {% extends "wagtailadmin/base.html" %}
 
-{% load staticfiles wagtailadmin_tags i18n wagtailvideos_tags %}
+{% load static wagtailadmin_tags i18n wagtailvideos_tags %}
 
 {% block titletag %}{% blocktrans with title=video.title %}Editing video {{ title }}{% endblocktrans %}{% endblock %}
 
