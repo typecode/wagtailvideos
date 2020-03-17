@@ -1,48 +1,32 @@
 language: python
-cache: pip
-dist: trusty
+dist: xenial
+
+
+cache:
+  pip: true
+  directories:
+    - $HOME/.cache/pip
+    - $HOME/virtualenv
 
 env:
   global:
     - DJANGO_SETTINGS_MODULE="tests.app.settings"
 
-
-matrix:
-  include:
-    - env: TOXENV=py35-dj20-wt24
-      python: 3.5
-    - env: TOXENV=py35-dj21-wt24
-      python: 3.5
-    - env: TOXENV=py36-dj20-wt24
-      python: 3.6
-    - env: TOXENV=py36-dj21-wt24
-      python: 3.6
-    - env: TOXENV=py35-dj20-wt25
-      python: 3.5
-    - env: TOXENV=py35-dj21-wt25
-      python: 3.5
-    - env: TOXENV=py36-dj20-wt25
-      python: 3.6
-    - env: TOXENV=py36-dj21-wt25
-      python: 3.6
-    # - env: TOXENV=py36-dj22-wt25
-      # python: 3.6
-    - env: TOXENV='flake8,isort'
-      python: 3.5
+python:
+  - "3.5"
+  - "3.6"
+  - "3.7"
+  - "3.8"
 
 before_install:
-    - sudo add-apt-repository ppa:mc3man/trusty-media -y
+    - sudo add-apt-repository ppa:mc3man/xerus-media -y
     - sudo apt-get update -qq
     # The install of ffmpeg fails at random with 'There were unauthenticated packages' 🤷‍♂️
     - sudo apt-get install ffmpeg --allow-unauthenticated -y
 
 install:
-  - pip install --upgrade pip wheel tox
+  - pip install --upgrade pip wheel tox-travis
 
-cache:
-  directories:
-    - $HOME/.cache/pip
-    - $HOME/virtualenv
 
 script:
   - tox

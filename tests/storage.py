@@ -1,6 +1,7 @@
 import errno
 import os
 from datetime import datetime
+from urllib.parse import urljoin
 
 from django.conf import settings
 from django.core.files import File, locks
@@ -10,7 +11,6 @@ from django.utils import timezone
 from django.utils._os import safe_join
 from django.utils.deconstruct import deconstructible
 from django.utils.encoding import filepath_to_uri, force_text
-from django.utils.six.moves.urllib.parse import urljoin
 
 
 @deconstructible

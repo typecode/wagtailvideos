@@ -1,3 +1,4 @@
+import wagtail
 from django.core.paginator import Paginator
 from django.http import HttpResponseNotAllowed
 from django.shortcuts import get_object_or_404, redirect, render
@@ -6,7 +7,6 @@ from django.utils.translation import ugettext as _
 from django.views.decorators.vary import vary_on_headers
 from wagtail.admin import messages
 from wagtail.admin.forms.search import SearchForm
-from wagtail.admin.utils import PermissionPolicyChecker, popular_tags_for_model
 from wagtail.core.models import Collection
 from wagtail.search.backends import get_search_backends
 
@@ -14,6 +14,12 @@ from wagtailvideos import ffmpeg
 from wagtailvideos.forms import VideoTranscodeAdminForm, get_video_form
 from wagtailvideos.models import Video
 from wagtailvideos.permissions import permission_policy
+
+if wagtail.__version__ >= '2.7':
+    from wagtail.admin.models import popular_tags_for_model
+    from wagtail.admin.auth import PermissionPolicyChecker
+else:
+    from wagtail.admin.utils import PermissionPolicyChecker, popular_tags_for_model
 
 permission_checker = PermissionPolicyChecker(permission_policy)
 
