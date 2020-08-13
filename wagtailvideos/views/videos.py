@@ -1,4 +1,5 @@
 import wagtail
+from packaging import version
 from django.core.paginator import Paginator
 from django.http import HttpResponseNotAllowed
 from django.shortcuts import get_object_or_404, redirect, render
@@ -15,7 +16,7 @@ from wagtailvideos.forms import VideoTranscodeAdminForm, get_video_form
 from wagtailvideos.models import Video
 from wagtailvideos.permissions import permission_policy
 
-if wagtail.__version__ >= '2.7':
+if version.parse(wagtail.__version__) >= version.parse('2.7'):
     from wagtail.admin.models import popular_tags_for_model
     from wagtail.admin.auth import PermissionPolicyChecker
 else:
