@@ -29,7 +29,8 @@ from wagtail.search.queryset import SearchableQuerySetMixin
 
 from wagtailvideos import ffmpeg
 
-if wagtail.__version__ >= '2.7':
+from distutils.version import LooseVersion
+if LooseVersion(wagtail.__version__) >= LooseVersion('2.7'):
     from wagtail.admin.models import get_object_usage
 else:
     from wagtail.admin.utils import get_object_usage
