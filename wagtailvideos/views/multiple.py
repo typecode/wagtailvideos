@@ -1,5 +1,4 @@
 import wagtail
-from packaging import version
 from django.http import HttpResponseBadRequest, JsonResponse
 from django.shortcuts import get_object_or_404, render
 from django.template.loader import render_to_string
@@ -12,7 +11,7 @@ from wagtailvideos.forms import get_video_form
 from wagtailvideos.models import Video
 from wagtailvideos.permissions import permission_policy
 
-if version.parse(wagtail.__version__) >= version.parse('2.7'):
+if wagtail.__version__ >= '2.7':
     from wagtail.admin.auth import PermissionPolicyChecker
 else:
     from wagtail.admin.utils import PermissionPolicyChecker
