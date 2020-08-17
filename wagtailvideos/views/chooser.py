@@ -1,3 +1,5 @@
+from distutils.version import LooseVersion
+
 import wagtail
 from django.core.paginator import Paginator
 from django.shortcuts import get_object_or_404, render
@@ -12,12 +14,12 @@ from wagtailvideos.forms import get_video_form
 from wagtailvideos.models import Video
 from wagtailvideos.permissions import permission_policy
 
-from distutils.version import LooseVersion
 if LooseVersion(wagtail.__version__) >= LooseVersion('2.7'):
-    from wagtail.admin.models import popular_tags_for_model
     from wagtail.admin.auth import PermissionPolicyChecker
+    from wagtail.admin.models import popular_tags_for_model
 else:
-    from wagtail.admin.utils import PermissionPolicyChecker, popular_tags_for_model
+    from wagtail.admin.utils import (
+        PermissionPolicyChecker, popular_tags_for_model)
 
 permission_checker = PermissionPolicyChecker(permission_policy)
 

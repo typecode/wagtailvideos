@@ -7,6 +7,7 @@ import subprocess
 import tempfile
 import threading
 from contextlib import contextmanager
+from distutils.version import LooseVersion
 
 import wagtail
 from django.conf import settings
@@ -29,7 +30,6 @@ from wagtail.search.queryset import SearchableQuerySetMixin
 
 from wagtailvideos import ffmpeg
 
-from distutils.version import LooseVersion
 if LooseVersion(wagtail.__version__) >= LooseVersion('2.7'):
     from wagtail.admin.models import get_object_usage
 else:
