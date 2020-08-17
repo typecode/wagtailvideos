@@ -6,7 +6,6 @@ import shutil
 import subprocess
 import tempfile
 import threading
-from packaging import version
 from contextlib import contextmanager
 
 import wagtail
@@ -30,7 +29,7 @@ from wagtail.search.queryset import SearchableQuerySetMixin
 
 from wagtailvideos import ffmpeg
 
-if version.parse(wagtail.__version__) >= version.parse('2.7'):
+if wagtail.__version__ >= '2.7':
     from wagtail.admin.models import get_object_usage
 else:
     from wagtail.admin.utils import get_object_usage
