@@ -9,10 +9,10 @@ from django.template.defaultfilters import filesizeformat
 from django.test import TestCase, override_settings
 from django.urls import reverse
 from mock import patch
+from tests.utils import create_test_video_file
 from wagtail.core.models import Collection, GroupCollectionPermission
 from wagtail.tests.utils import WagtailTestUtils
 
-from tests.utils import create_test_video_file
 from wagtailvideos.models import Video
 
 
