@@ -2,9 +2,8 @@ from __future__ import unicode_literals
 
 import os
 
-from django.core.files import File
-
 import tests
+from django.core.files import File
 
 
 def create_test_video_file():
