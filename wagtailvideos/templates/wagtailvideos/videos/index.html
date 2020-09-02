@@ -23,7 +23,8 @@
     {% trans "Videos" as video_str %}
 
     {% trans "Add a video" as add_video_str %}
-    {% include "wagtailadmin/shared/header.html" with title=video_str add_link="wagtailvideos:add_multiple" icon="media" add_text=add_video_str search_url="wagtailvideos:index" %}
+    {% url "wagtailvideos:add_multiple" as add_link %}
+    {% include "wagtailadmin/shared/header.html" with title=video_str action_url=add_link icon="media" action_text=add_video_str search_url="wagtailvideos:index" %}
 
     <div class="nice-padding">
         {% if collections %}
