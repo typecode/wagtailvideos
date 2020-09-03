@@ -10,7 +10,7 @@ from setuptools import find_packages, setup  # noqa: E4
 
 setup(
     name='wagtailvideos',
-    version='2.8.1',
+    version='2.8.2',
     description="A wagtail module for uploading and displaying videos in various codecs.",
     long_description=readme,
     author='Neon Jungle',
