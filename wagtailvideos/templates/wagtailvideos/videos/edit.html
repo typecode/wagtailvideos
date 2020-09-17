@@ -83,7 +83,7 @@
         <dl>
             {% if video.thumbnail %}
             <dt>{% trans "Thumbnail" %}</dt>
-            <dd><img src='{{ video.thumbnail.url }}' /></dd>
+            <dd><img src="{{ video.thumbnail.url }}" /></dd>
             {% endif %}
             <dt>{% trans "Filesize" %}</dt>
             <dd>{% if filesize %}{{ filesize|filesizeformat }}{% else %}{% trans "File not found" %}{% endif %}</dd>
