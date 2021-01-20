@@ -47,7 +47,7 @@ class VideoQuality(ChoiceEnum):
 class MediaFormats(ChoiceEnum):
     webm = 'VP8 and Vorbis in WebM'
     mp4 = 'H.264 and MP3 in Mp4'
-    ogg = 'Theora and Voris in Ogg'
+    ogg = 'Theora and Vorbis in Ogg'
 
     def get_quality_param(self, quality):
         if self is MediaFormats.webm:
