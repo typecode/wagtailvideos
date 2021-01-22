@@ -6,7 +6,8 @@ stages:
 .python_test:
   stage: test
   script:
-    - apt-get install ffmpeg
+    - apt-get update
+    - apt-get install -f ffmpeg
     - python runtests.py
 
 head:
