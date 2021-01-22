@@ -1,0 +1,29 @@
+stages:
+  - test
+  - release
+
+
+.python_test:
+  stage: test
+  script:
+    - apt-get install ffmpeg
+    - python runtests.py
+
+head:
+  extends: .python_test
+  image: python:3.8
+  before_script:
+    - pip install .['testing']
+
+lts_27:
+  extends: .python_test
+  image: python:3.7
+  extends: .python_test
+  before_script:
+    - pip install wagtail~=2.7 django~=2.2 mock
+
+lts_211:
+  image: python:3.8
+  extends: .python_test
+  before_script:
+    - pip install wagtail~=2.11 django~=3.1 mock
