@@ -21,10 +21,10 @@ lts_27:
   image: python:3.7
   extends: .python_test
   before_script:
-    - pip install wagtail~=2.7 django~=2.2 mock
+    - pip install .['testing'] wagtail~=2.7 django~=2.2
 
 lts_211:
   image: python:3.8
   extends: .python_test
   before_script:
-    - pip install wagtail~=2.11 django~=3.1 mock
+    - pip install .['testing'] wagtail~=2.11 django~=3.1
