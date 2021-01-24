@@ -1,6 +1,13 @@
 CHANGELOG
 =========
 
+2.9.0
+-----
+
+- Added VideoChooserBlock
+- Added video summary on admin homepage
+
+
 2.4.0
 -----
 

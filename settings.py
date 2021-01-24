@@ -6,3 +6,7 @@ DATABASES = {
         'NAME': 'tests.sqlite3',
     },
 }
+
+INSTALLED_APPS += [
+    'wagtail.contrib.styleguide',
+]

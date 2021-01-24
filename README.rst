@@ -1,6 +1,10 @@
 wagtailvideos
 =============
 
+.. image:: https://gitlab.com/neonjungle/wagtailvideos/badges/master/pipeline.svg
+    :target: https://gitlab.com/neonjungle/wagtailvideos/pipelines?ref=master
+
+
 Based on wagtailimages. The aim was to have feature parity with images
 but for html5 videos. Includes the ability to transcode videos to a
 html5 compliant codec using ffmpeg.
@@ -31,12 +35,11 @@ Implement as a ``ForeignKey`` relation, same as wagtailimages.
 
 .. code:: python
 
-
     from django.db import models
 
-    from wagtail.wagtailadmin.edit_handlers import FieldPanel
-    from wagtail.wagtailcore.fields import RichTextField
-    from wagtail.wagtailcore.models import Page
+    from wagtail.admin.edit_handlers import FieldPanel
+    from wagtail.core.fields import RichTextField
+    from wagtail.core.models import Page
 
     from wagtailvideos.edit_handlers import VideoChooserPanel
 
@@ -51,6 +54,28 @@ Implement as a ``ForeignKey`` relation, same as wagtailimages.
             FieldPanel('body'),
             VideoChooserPanel('header_video'),
         ]
+
+In a Streamfield:
+~~~~~~~~~~~~~~~~~
+
+A VideoChooserBlock is included
+
+.. code:: python
+  
+  from wagtail.admin.edit_handlers import StreamFieldPanel
+  from wagtail.core.fields import StreamField
+  from wagtail.core.models import Page
+
+  from wagtailvideos.blocks import VideoChooserBlock
+
+  class ContentPage(Page):
+    body = StreamField([
+        ('video', VideoChooserBlock()),
+    ])
+
+    content_panels = Page.content_panels + [
+        StreamFieldPanel('body'),
+    ]
 
 In template:
 ~~~~~~~~~~~~
@@ -78,6 +103,4 @@ Future features
 ---------------
 
 -  Richtext embed
--  Streamfield block
 -  Transcoding via amazon service rather than ffmpeg
--  Wagtail homescreen video count
