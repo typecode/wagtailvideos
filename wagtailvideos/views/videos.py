@@ -11,7 +11,7 @@ from wagtail.admin import messages
 from wagtail.admin.forms.search import SearchForm
 from wagtail.core.models import Collection
 from wagtail.search.backends import get_search_backends
-
+from django.forms import modelformset_factory
 from wagtailvideos import ffmpeg, get_video_model
 from wagtailvideos.forms import VideoTranscodeAdminForm, get_video_form
 from wagtailvideos.permissions import permission_policy
@@ -121,6 +121,9 @@ def edit(request, video_id):
             messages.button(reverse('wagtailvideos:delete', args=(video.id,)), _('Delete'))
         ])
 
+    Track = Video.get_track_model()
+    TrackFormset = modelformset_factory(Track, exclude=('video',))
+
     return render(request, "wagtailvideos/videos/edit.html", {
         'video': video,
         'form': form,
@@ -128,6 +131,7 @@ def edit(request, video_id):
         'can_transcode': ffmpeg.installed(),
         'transcodes': video.transcodes.all(),
         'transcode_form': VideoTranscodeAdminForm(video=video),
+        'track_formset': TrackFormset(queryset=video.tracks.all()),
         'user_can_delete': permission_policy.user_has_permission_for_instance(request.user, 'delete', video)
     })
 

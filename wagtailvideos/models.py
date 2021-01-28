@@ -334,7 +334,7 @@ class AbstractTrack(models.Model):
         help_text='A user-readable title of the text track.')
     language = models.CharField(
         max_length=50,
-        choices=[(k, v) for k, v in bcp47.languages.items()],
+        choices=[(v, k) for k, v in bcp47.languages.items()],
         default='en', blank=True, help_text='Required if type is "Subtitle"', unique=True)
 
     @property

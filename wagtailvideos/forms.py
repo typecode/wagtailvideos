@@ -41,7 +41,6 @@ def get_video_form(model):
         # cause dubious results when multiple collections exist (e.g adding the
         # document to the root collection where the user may not have permission) -
         # and when only one collection exists, it will get hidden anyway.
-        print('collection not found')
         fields = list(fields) + ['collection']
 
     return modelform_factory(
