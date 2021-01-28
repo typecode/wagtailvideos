@@ -6,17 +6,14 @@ import shutil
 import subprocess
 import tempfile
 import threading
-from contextlib import contextmanager
 from distutils.version import LooseVersion
 
+import bcp47
 import wagtail
 from django.conf import settings
 from django.core.exceptions import SuspiciousFileOperation
 from django.core.files.base import ContentFile
-from django.core.files.temp import NamedTemporaryFile
 from django.db import models
-from django.db.models.signals import post_save, pre_delete
-from django.dispatch.dispatcher import receiver
 from django.forms.utils import flatatt
 from django.urls import reverse
 from django.utils.safestring import mark_safe
@@ -26,8 +23,6 @@ from taggit.managers import TaggableManager
 from wagtail.core.models import CollectionMember
 from wagtail.search import index
 from wagtail.search.queryset import SearchableQuerySetMixin
-
-from wagtailvideos import ffmpeg
 
 if LooseVersion(wagtail.__version__) >= LooseVersion('2.7'):
     from wagtail.admin.models import get_object_usage
@@ -180,12 +175,9 @@ class AbstractVideo(CollectionMember, index.Indexed, models.Model):
     def get_transcode_model(cls):
         return cls.transcodes.rel.related_model
 
-    def get_transcode(self, media_format):
-        Transcode = self.get_transcode_model()
-        try:
-            return self.transcodes.get(media_format=media_format)
-        except Transcode.DoesNotExist:
-            return self.do_transcode(media_format)
+    @classmethod
+    def get_track_model(cls):
+        return cls.tracks.rel.related_model
 
     def video_tag(self, attrs=None):
         if attrs is None:
@@ -212,7 +204,7 @@ class AbstractVideo(CollectionMember, index.Indexed, models.Model):
         transcode, created = self.transcodes.get_or_create(
             media_format=media_format,
         )
-        if transcode.processing is False:
+        if created or transcode.processing is False:
             transcode.processing = True
             transcode.error_messages = ''
             transcode.quality = quality
@@ -292,61 +284,6 @@ class TranscodingThread(threading.Thread):
             shutil.rmtree(output_dir, ignore_errors=True)
 
 
-@contextmanager
-def get_local_file(file):
-    """
-    Get a local version of the file, downloading it from the remote storage if
-    required. The returned value should be used as a context manager to
-    ensure any temporary files are cleaned up afterwards.
-    """
-    try:
-        with open(file.path):
-            yield file.path
-    except NotImplementedError:
-        _, ext = os.path.splitext(file.name)
-        with NamedTemporaryFile(prefix='wagtailvideo-', suffix=ext) as tmp:
-            try:
-                file.open('rb')
-                for chunk in file.chunks():
-                    tmp.write(chunk)
-            finally:
-                file.close()
-            tmp.flush()
-            yield tmp.name
-
-
-# Delete files when model is deleted
-@receiver(pre_delete, sender=Video)
-def video_delete(sender, instance, **kwargs):
-    instance.thumbnail.delete(False)
-    instance.file.delete(False)
-
-
-# Fields that need the actual video file to create
-@receiver(post_save, sender=Video)
-def video_saved(sender, instance, **kwargs):
-    if not ffmpeg.installed():
-        return
-
-    if hasattr(instance, '_from_signal'):
-        return
-
-    has_changed = instance._initial_file is not instance.file
-    filled_out = instance.thumbnail is not None and instance.duration is not None
-    if has_changed or not filled_out:
-        with get_local_file(instance.file) as file_path:
-            if has_changed or instance.thumbnail is None:
-                instance.thumbnail = ffmpeg.get_thumbnail(file_path)
-
-            if has_changed or instance.duration is None:
-                instance.duration = ffmpeg.get_duration(file_path)
-
-    instance.file_size = instance.file.size
-    instance._from_signal = True
-    instance.save()
-    del instance._from_signal
-
-
 class AbstractVideoTranscode(models.Model):
     media_format = EnumChoiceField(MediaFormats)
     quality = EnumChoiceField(VideoQuality, default=VideoQuality.default)
@@ -377,7 +314,41 @@ class VideoTranscode(AbstractVideoTranscode):
         )
 
 
-# Delete files when model is deleted
-@receiver(pre_delete, sender=VideoTranscode)
-def transcode_delete(sender, instance, **kwargs):
-    instance.file.delete(False)
+class AbstractTrack(models.Model):
+    # TODO move to TextChoices once djangp < 2 is dropped
+    track_kinds = [
+        ('subtitles', 'Subtitles'),
+        ('captions', 'Captions'),
+        ('descriptions', 'Descriptions'),
+        ('chapters', 'Chapters'),
+        ('metadata', 'Metadata'),
+    ]
+
+    file = models.FileField(
+        verbose_name=_('file'),
+        upload_to=get_upload_to
+    )
+    kind = models.CharField(max_length=50, choices=track_kinds, default=track_kinds[0][0])
+    label = models.CharField(
+        max_length=255, blank=True,
+        help_text='A user-readable title of the text track.')
+    language = models.CharField(
+        max_length=50,
+        choices=[(k, v) for k, v in bcp47.languages.items()],
+        default='en', blank=True, help_text='Required if type is "Subtitle"', unique=True)
+
+    @property
+    def url(self):
+        return self.file.url
+
+    def get_upload_to(self, filename):
+        folder_name = 'video_tracks'
+        filename = self.file.field.storage.get_valid_name(filename)
+        return os.path.join(folder_name, filename)
+
+    class Meta:
+        abstract = True
+
+
+class Track(AbstractTrack):
+    video = models.ForeignKey(Video, related_name='tracks', on_delete=models.CASCADE)

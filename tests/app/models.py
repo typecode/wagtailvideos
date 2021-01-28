@@ -5,7 +5,7 @@ from wagtail.admin.edit_handlers import StreamFieldPanel
 
 from wagtailvideos.edit_handlers import VideoChooserPanel
 from wagtailvideos.blocks import VideoChooserBlock
-from wagtailvideos.models import AbstractVideo, AbstractVideoTranscode
+from wagtailvideos.models import AbstractVideo, AbstractVideoTranscode, AbstractTrack
 
 
 class CustomVideoModel(AbstractVideo):
@@ -29,6 +29,9 @@ class CustomVideoTranscode(AbstractVideoTranscode):
             ('video', 'media_format')
         )
 
+
+class CustomTrack(AbstractTrack):
+    video = models.ForeignKey(CustomVideoModel, related_name='tracks', on_delete=models.CASCADE)
 
 class TestPage(Page):
     video_field = models.ForeignKey(

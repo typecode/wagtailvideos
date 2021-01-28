@@ -23,4 +23,6 @@ class WagtailVideosApp(AppConfig):
     verbose_name = 'Wagtail Videos'
 
     def ready(self):
+        from wagtailvideos.signals import register_signal_handlers
+        register_signal_handlers()
         register(ffmpeg_check)
