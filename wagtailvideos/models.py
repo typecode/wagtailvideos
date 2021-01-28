@@ -315,7 +315,7 @@ class VideoTranscode(AbstractVideoTranscode):
 
 
 class AbstractTrack(models.Model):
-    # TODO move to TextChoices once djangp < 2 is dropped
+    # TODO move to TextChoices once djang0 < 3 is dropped
     track_kinds = [
         ('subtitles', 'Subtitles'),
         ('captions', 'Captions'),
