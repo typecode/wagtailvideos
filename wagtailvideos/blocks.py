@@ -1,11 +1,12 @@
 from wagtail.core.blocks import ChooserBlock
 from django.utils.functional import cached_property
 
+
 class VideoChooserBlock(ChooserBlock):
     @cached_property
     def target_model(self):
-        from wagtailvideos.models import Video
-        return Video
+        from wagtailvideos import get_video_model
+        return get_video_model()
 
     @cached_property
     def widget(self):

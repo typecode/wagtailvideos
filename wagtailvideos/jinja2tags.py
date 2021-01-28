@@ -1,6 +1,8 @@
 from jinja2.ext import Extension
 
-from .models import Video
+from . import get_video_model
+
+Video = get_video_model()
 
 
 def video(video, **attrs):

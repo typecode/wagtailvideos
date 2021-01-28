@@ -10,9 +10,11 @@ from django.utils.html import format_html
 from django.templatetags.static import static
 from wagtailvideos import urls
 from wagtailvideos.forms import GroupVideoPermissionFormSet
-from wagtailvideos.models import Video
+from wagtailvideos import get_video_model
 
 from .permissions import permission_policy
+
+Video = get_video_model()
 
 
 @hooks.register('register_admin_urls')

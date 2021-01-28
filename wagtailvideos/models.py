@@ -19,10 +19,9 @@ from django.db.models.signals import post_save, pre_delete
 from django.dispatch.dispatcher import receiver
 from django.forms.utils import flatatt
 from django.urls import reverse
-from django.utils.html import mark_safe
+from django.utils.safestring import mark_safe
 from django.utils.translation import ugettext_lazy as _
 from enumchoicefield import ChoiceEnum, EnumChoiceField
-from six import python_2_unicode_compatible
 from taggit.managers import TaggableManager
 from wagtail.core.models import CollectionMember
 from wagtail.search import index
@@ -79,7 +78,6 @@ def get_upload_to(instance, filename):
     return instance.get_upload_to(filename)
 
 
-@python_2_unicode_compatible
 class AbstractVideo(CollectionMember, index.Indexed, models.Model):
     title = models.CharField(max_length=255, verbose_name=_('title'))
     file = models.FileField(
