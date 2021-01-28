@@ -11,7 +11,7 @@ from wagtail.images.views.chooser import get_chooser_js_data
 from wagtail.search import index as search_index
 
 from wagtailvideos.forms import get_video_form
-from wagtailvideos.models import Video
+from wagtailvideos import get_video_model
 from wagtailvideos.permissions import permission_policy
 
 if LooseVersion(wagtail.__version__) >= LooseVersion('2.7'):
@@ -41,6 +41,7 @@ def get_video_json(video):
 
 
 def chooser(request):
+    Video = get_video_model()
     VideoForm = get_video_form(Video)
     uploadform = VideoForm()
 
@@ -101,7 +102,7 @@ def chooser(request):
 
 
 def video_chosen(request, video_id):
-    video = get_object_or_404(Video, id=video_id)
+    video = get_object_or_404(get_video_model(), id=video_id)
 
     return render_modal_workflow(
         request, None, json_data={
@@ -112,6 +113,7 @@ def video_chosen(request, video_id):
 
 @permission_checker.require('add')
 def chooser_upload(request):
+    Video = get_video_model()
     VideoForm = get_video_form(Video)
 
     searchform = SearchForm()

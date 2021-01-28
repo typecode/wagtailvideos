@@ -43,6 +43,7 @@ Implement as a ``ForeignKey`` relation, same as wagtailimages.
 
     from wagtailvideos.edit_handlers import VideoChooserPanel
 
+
     class HomePage(Page):
         body = RichtextField()
         header_video = models.ForeignKey('wagtailvideos.Video',
@@ -68,6 +69,7 @@ A VideoChooserBlock is included
 
   from wagtailvideos.blocks import VideoChooserBlock
 
+
   class ContentPage(Page):
     body = StreamField([
         ('video', VideoChooserBlock()),
@@ -90,6 +92,8 @@ tag. The original video and all extra transcodes are added as
     {% load wagtailvideos_tags %}
     {% video self.header_video autoplay controls width=256 %}
 
+Jinja2 extensions are also included.
+
 How to transcode using ffmpeg:
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -99,8 +103,46 @@ be used to create new transcodes. It is assumed that your compiled
 version of ffmpeg has the matching codec libraries required for the
 transcode.
 
+Custom Video models:
+~~~~~~~~~~~~~~~~~~~~
+
+Same as Wagtail Images, a custom model can be used to replace the built in Video model using the 
+``WAGTAILVIDEOS_VIDEO_MODEL`` setting.
+
+.. code:: django
+
+    # settings.py
+    WAGTAILVIDEOS_VIDEO_MODEL = 'videos.AttributedVideo'
+
+    # app.videos.models
+    from django.db import models
+    from wagtailvideos.models import AbstractVideo, AbstractVideoTranscode
+
+    class AttributedVideo(AbstractVideo):
+        attribution = models.TextField()
+
+        admin_form_fields = (
+            'title',
+            'attribution',
+            'file',
+            'collection',
+            'thumbnail',
+            'tags',
+        )
+
+    class CustomTranscode(AbstractVideoTranscode):
+        video = models.ForeignKey(AttributedVideo, related_name='transcodes', on_delete=models.CASCADE)
+
+        class Meta:
+            unique_together = (
+                ('video', 'media_format')
+            )
+
+
+
 Future features
 ---------------
 
+-  Some docs
 -  Richtext embed
 -  Transcoding via amazon service rather than ffmpeg

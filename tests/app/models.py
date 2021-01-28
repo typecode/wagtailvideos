@@ -5,6 +5,30 @@ from wagtail.admin.edit_handlers import StreamFieldPanel
 
 from wagtailvideos.edit_handlers import VideoChooserPanel
 from wagtailvideos.blocks import VideoChooserBlock
+from wagtailvideos.models import AbstractVideo, AbstractVideoTranscode
+
+
+class CustomVideoModel(AbstractVideo):
+    attribution = models.TextField(blank=True)
+
+    admin_form_fields = (
+        'title',
+        'attribution',
+        'file',
+        'collection',
+        'thumbnail',
+        'tags',
+    )
+
+
+class CustomVideoTranscode(AbstractVideoTranscode):
+    video = models.ForeignKey(CustomVideoModel, related_name='transcodes', on_delete=models.CASCADE)
+
+    class Meta:
+        unique_together = (
+            ('video', 'media_format')
+        )
+
 
 class TestPage(Page):
     video_field = models.ForeignKey(

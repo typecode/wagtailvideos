@@ -10,7 +10,7 @@ from django.views.decorators.vary import vary_on_headers
 from wagtail.search.backends import get_search_backends
 
 from wagtailvideos.forms import get_video_form
-from wagtailvideos.models import Video
+from wagtailvideos import get_video_model
 from wagtailvideos.permissions import permission_policy
 
 if LooseVersion(wagtail.__version__) >= LooseVersion('2.7'):
@@ -37,6 +37,7 @@ def get_video_edit_form(VideoModel):
 
 @vary_on_headers('X-Requested-With')
 def add(request):
+    Video = get_video_model()
     VideoForm = get_video_form(Video)
 
     collections = permission_policy.collections_user_has_permission_for(request.user, 'add')
@@ -98,6 +99,7 @@ def add(request):
 
 @require_POST
 def edit(request, video_id, callback=None):
+    Video = get_video_model()
     VideoForm = get_video_edit_form(Video)
 
     video = get_object_or_404(Video, id=video_id)
@@ -133,7 +135,7 @@ def edit(request, video_id, callback=None):
 
 @require_POST
 def delete(request, video_id):
-    video = get_object_or_404(Video, id=video_id)
+    video = get_object_or_404(get_video_model(), id=video_id)
 
     if not request.is_ajax():
         return HttpResponseBadRequest("Cannot POST to this view without AJAX")

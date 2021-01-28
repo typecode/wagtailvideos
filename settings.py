@@ -10,3 +10,5 @@ DATABASES = {
 INSTALLED_APPS += [
     'wagtail.contrib.styleguide',
 ]
+
+WAGTAILVIDEOS_VIDEO_MODEL = 'app.CustomVideoModel'
