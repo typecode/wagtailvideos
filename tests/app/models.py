@@ -9,7 +9,7 @@ from wagtailvideos.models import AbstractVideo, AbstractVideoTranscode
 
 
 class CustomVideoModel(AbstractVideo):
-    attribution = models.TextField()
+    attribution = models.TextField(blank=True)
 
     admin_form_fields = (
         'title',
