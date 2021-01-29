@@ -16,6 +16,7 @@ from wagtail.search.backends import get_search_backends
 from wagtailvideos import ffmpeg, get_video_model, is_modeladmin_installed
 from wagtailvideos.forms import VideoTranscodeAdminForm, get_video_form
 from wagtailvideos.permissions import permission_policy
+from wagtailvideos.models import TrackListing
 
 if LooseVersion(wagtail.__version__) >= LooseVersion('2.7'):
     from wagtail.admin.auth import PermissionPolicyChecker
@@ -119,10 +120,9 @@ def edit(request, video_id):
             messages.button(reverse('wagtailvideos:delete', args=(video.id,)), _('Delete'))
         ])
     if is_modeladmin_installed():
-        tracks_listing = video.tracks
-        url_helper = AdminURLHelper(Video.get_track_model())
-        if tracks_listing:
-            action_url = url_helper.get_action_url('edit', instance_pk=tracks_listing.pk)
+        url_helper = AdminURLHelper(TrackListing)
+        if hasattr(video, 'track_listing'):
+            action_url = url_helper.get_action_url('edit', instance_pk=video.track_listing.pk)
         else:
             action_url = url_helper.create_url
     else:

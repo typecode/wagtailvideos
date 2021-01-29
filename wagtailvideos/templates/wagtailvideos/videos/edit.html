@@ -110,10 +110,10 @@
         {% endif %}
         {% if tracks_action_url %}
             <h2 class="u-text-transform-uppercase">Tracks</h2>
-            <p>You can add/edit subtitles or accessibility captions for you video. For information about the filetype that should be used see the mozilla docs on <a href="https://developer.mozilla.org/en-US/docs/Web/API/WebVTT_API">WebVTT</a></p>
-                {% if video.tracks %}
+            <p>You can add/edit subtitles or accessibility captions for this video. For information about the filetype that should be used see the mozilla docs on <a href="https://developer.mozilla.org/en-US/docs/Web/API/WebVTT_API">WebVTT</a></p>
+                {% if video.track_listing %}
                 <ul>
-                {% for track in video.tracks.tracks.all %}
+                {% for track in video.track_listing.tracks.all %}
                     <li>{{ track }}</li>
                 {% endfor %}
                 </ul>

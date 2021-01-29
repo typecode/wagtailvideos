@@ -1,6 +1,3 @@
-from wagtailvideos import get_video_model_string
-from modelcluster.models import ClusterableModel
-from modelcluster.fields import ParentalKey
 import logging
 import mimetypes
 import os
@@ -22,10 +19,14 @@ from django.urls import reverse
 from django.utils.safestring import mark_safe
 from django.utils.translation import ugettext_lazy as _
 from enumchoicefield import ChoiceEnum, EnumChoiceField
+from modelcluster.fields import ParentalKey
+from modelcluster.models import ClusterableModel
 from taggit.managers import TaggableManager
-from wagtail.core.models import CollectionMember
+from wagtail.core.models import CollectionMember, Orderable
 from wagtail.search import index
 from wagtail.search.queryset import SearchableQuerySetMixin
+
+from wagtailvideos import get_video_model_string
 
 if LooseVersion(wagtail.__version__) >= LooseVersion('2.7'):
     from wagtail.admin.models import get_object_usage
@@ -178,10 +179,6 @@ class AbstractVideo(CollectionMember, index.Indexed, ClusterableModel):
     def get_transcode_model(cls):
         return cls.transcodes.rel.related_model
 
-    @classmethod
-    def get_track_model(cls):
-        return cls.tracks.related.related_model
-
     def video_tag(self, attrs=None):
         if attrs is None:
             attrs = {}
@@ -200,8 +197,13 @@ class AbstractVideo(CollectionMember, index.Indexed, ClusterableModel):
                        .format(self.url, mime.guess_type(self.url)[0]))
 
         sources.append("<p>Sorry, your browser doesn't support playback for this video</p>")
+
+        tracks = []
+        if hasattr(self, 'track_listing'):
+            tracks = [t.track_tag() for t in self.track_listing.tracks.all()]
+
         return mark_safe(
-            "<video {0}>\n{1}\n</video>".format(flatatt(attrs), "\n".join(sources)))
+            "<video {0}>\n{1}\n{2}\n</video>".format(flatatt(attrs), "\n".join(sources), "\n".join(tracks)))
 
     def do_transcode(self, media_format, quality):
         transcode, created = self.transcodes.get_or_create(
@@ -295,7 +297,7 @@ class AbstractVideoTranscode(models.Model):
                             upload_to=get_upload_to)
     error_message = models.TextField(blank=True)
 
-    @ property
+    @property
     def url(self):
         return self.file.url
 
@@ -320,13 +322,13 @@ class VideoTranscode(AbstractVideoTranscode):
 class TrackListing(ClusterableModel):
     video = models.OneToOneField(
         get_video_model_string(), on_delete=models.CASCADE,
-        related_name='tracks')
+        related_name='track_listing')
 
     def __str__(self):
         return self.video.title
 
 
-class VideoTrack(models.Model):
+class VideoTrack(Orderable):
     listing = ParentalKey(TrackListing, related_name='tracks', on_delete=models.CASCADE)
     # TODO move to TextChoices once django < 3 is dropped
     track_kinds = [
@@ -349,6 +351,18 @@ class VideoTrack(models.Model):
         max_length=50,
         choices=[(v, k) for k, v in bcp47.languages.items()],
         default='en', blank=True, help_text='Required if type is "Subtitle"', unique=True)
+
+    def track_tag(self):
+        attrs = {
+            'kind': self.kind,
+            'src': self.url,
+        }
+        if self.label:
+            attrs['label'] = self.label
+        if self.language:
+            attrs['srclang'] = self.language
+
+        return "<track {0}{1}>".format(flatatt(attrs), ' default' if self.sort_order == 0 else '')
 
     def __str__(self):
         return "{0} - {1}".format(self.label or self.get_kind_display(), self.get_language_display())
