@@ -2,16 +2,16 @@ from distutils.version import LooseVersion
 
 import wagtail
 from django.core.paginator import Paginator
-from django.http import HttpResponseNotAllowed
 from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse
 from django.utils.translation import ugettext as _
+from django.views.decorators.http import require_POST
 from django.views.decorators.vary import vary_on_headers
 from wagtail.admin import messages
 from wagtail.admin.forms.search import SearchForm
 from wagtail.core.models import Collection
 from wagtail.search.backends import get_search_backends
-from django.forms import modelformset_factory
+
 from wagtailvideos import ffmpeg, get_video_model
 from wagtailvideos.forms import VideoTranscodeAdminForm, get_video_form
 from wagtailvideos.permissions import permission_policy
@@ -104,10 +104,7 @@ def edit(request, video_id):
             for backend in get_search_backends():
                 backend.add(video)
 
-            messages.success(request, _("Video '{0}' updated.").format(video.title), buttons=[
-                messages.button(reverse('wagtailvideos:edit', args=(video.id,)), _('Edit again'))
-            ])
-            return redirect('wagtailvideos:index')
+            messages.success(request, _("Video '{0}' updated.").format(video.title))
         else:
             messages.error(request, _("The video could not be saved due to errors."))
     else:
@@ -121,9 +118,6 @@ def edit(request, video_id):
             messages.button(reverse('wagtailvideos:delete', args=(video.id,)), _('Delete'))
         ])
 
-    Track = Video.get_track_model()
-    TrackFormset = modelformset_factory(Track, exclude=('video',))
-
     return render(request, "wagtailvideos/videos/edit.html", {
         'video': video,
         'form': form,
@@ -131,14 +125,12 @@ def edit(request, video_id):
         'can_transcode': ffmpeg.installed(),
         'transcodes': video.transcodes.all(),
         'transcode_form': VideoTranscodeAdminForm(video=video),
-        'track_formset': TrackFormset(queryset=video.tracks.all()),
         'user_can_delete': permission_policy.user_has_permission_for_instance(request.user, 'delete', video)
     })
 
 
+@require_POST
 def create_transcode(request, video_id):
-    if request.method != 'POST':
-        return HttpResponseNotAllowed(['POST'])
     video = get_object_or_404(get_video_model(), id=video_id)
     transcode_form = VideoTranscodeAdminForm(data=request.POST, video=video)
 
@@ -193,13 +185,13 @@ def add(request):
     })
 
 
-def usage(request, image_id):
-    image = get_object_or_404(get_video_model(), id=image_id)
+def usage(request, video_id):
+    video = get_object_or_404(get_video_model(), id=video_id)
 
-    paginator = Paginator(image.get_usage(), per_page=12)
+    paginator = Paginator(video.get_usage(), per_page=12)
     page = paginator.get_page(request.GET.get('p'))
 
     return render(request, "wagtailvideos/videos/usage.html", {
-        'image': image,
+        'video': video,
         'used_by': page
     })

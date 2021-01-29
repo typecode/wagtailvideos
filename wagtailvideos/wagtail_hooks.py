@@ -1,17 +1,21 @@
+from wagtail.admin.edit_handlers import InlinePanel
+from wagtailvideos.edit_handlers import VideoChooserPanel
+from wagtail.contrib.modeladmin.options import ModelAdmin, modeladmin_register
 from django.conf.urls import include, url
+from django.templatetags.static import static
 from django.urls import reverse
 from django.utils.html import format_html
+from django.utils.safestring import mark_safe
 from django.utils.translation import ugettext_lazy as _
-from wagtail.admin.menu import MenuItem, SubmenuMenuItem, Menu
+from wagtail.admin.menu import Menu, MenuItem, SubmenuMenuItem
 from wagtail.admin.search import SearchArea
 from wagtail.admin.site_summary import SummaryItem
 from wagtail.core import hooks
-from django.utils.html import format_html
-from django.templatetags.static import static
-from wagtailvideos import urls
+
+from wagtailvideos import get_video_model, urls
 from wagtailvideos.forms import GroupVideoPermissionFormSet
-from wagtailvideos import get_video_model
-from django.utils.safestring import mark_safe
+from wagtailvideos.models import TrackListing
+
 from .permissions import permission_policy
 
 Video = get_video_model()
@@ -48,7 +52,7 @@ class VideoMenu(Menu):
 
     def menu_items_for_request(self, request):
         return [
-            MenuItem(_('Videos'), reverse('wagtailvideos:index'),
+            MenuItem(_('Manage videos'), reverse('wagtailvideos:index'),
                      name='videos', classnames='icon icon-media', order=300)
         ]
 
@@ -109,3 +113,19 @@ def register_media_search_area():
 @hooks.register('insert_global_admin_css')
 def summary_css():
     return format_html('<link rel="stylesheet" href="{}">', static('wagtailvideos/css/summary-override.css'))
+
+
+@modeladmin_register
+class TracksAdmin(ModelAdmin):
+    model = TrackListing
+
+    list_display = ('__str__', 'track_count')
+
+    def track_count(self, track_listing):
+        return track_listing.tracks.count()
+    track_count.short_description = 'No. tracks'
+
+    panels = [
+        VideoChooserPanel('video'),
+        InlinePanel('tracks', heading="Tracks")
+    ]

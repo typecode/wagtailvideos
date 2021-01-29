@@ -41,6 +41,9 @@
                     {% include "wagtailadmin/shared/field_as_li.html" with li_classes="label-above label-uppercase" %}
                   {% endif %}
                   {% endfor %}
+            </ul>
+                <h2 class="u-text-transform-uppercase">Tracks</h2>
+                <p>Add/edit subtitles or accessibility captions for you video. For information about the filetype that should be used see the mozilla docs on <a href="https://developer.mozilla.org/en-US/docs/Web/API/WebVTT_API">WebVTT</a></p>
                 <li>
                     <input type="submit" class="button" value="{% trans 'Save' %}" /> {% if user_can_delete %}
                     <a href="{% url 'wagtailvideos:delete' video.id %}" class="button button-secondary no">{% trans "Delete video" %}</a> {% endif %}
@@ -76,10 +79,10 @@
         </div>
         <div class="row" style='margin-top: 2em;'>
         {% if can_transcode %}
-            <h3 class="label no-float u-text-transform-uppercase">Transcodes</h3>
+            <h2 class="u-text-transform-uppercase">Transcodes</h2>
             <p>If you wish to generate HTML5 compliant transcodes use the form below. This may take a while depending on the length of the video.</p>
             {% if transcodes %}
-            <h3 class="label no-float u-text-transform-uppercase">Available Transcodes</h3>
+            <h3 class="u-text-transform-uppercase">Available Transcodes</h3>
             <ul>
                 {% for transcode in transcodes %}
                 <li>
@@ -93,7 +96,7 @@
                 {% endfor %}
             </ul>
             {% endif %}
-            <h3 class="label no-float u-text-transform-uppercase">Create transcode</h3>
+            <h3 class="u-text-transform-uppercase">Create transcode</h3>
             <form action="{% url 'wagtailvideos:create_transcode' video.id %}" method="POST">
                 <ul class="fields">
                     {% csrf_token %}

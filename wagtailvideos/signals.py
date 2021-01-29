@@ -6,6 +6,7 @@ from django.db import transaction
 from django.db.models.signals import post_delete, post_save
 
 from wagtailvideos import ffmpeg, get_video_model
+from wagtailvideos.models import VideoTrack
 
 
 @contextmanager
@@ -47,7 +48,7 @@ def video_post_save(instance, **kwargs):
     if hasattr(instance, '_from_signal'):
         # Sender was us, don't run post save
         return
-    
+
     has_changed = instance._initial_file is not instance.file
     filled_out = instance.thumbnail is not None and instance.duration is not None
     if has_changed or not filled_out:
@@ -67,10 +68,8 @@ def video_post_save(instance, **kwargs):
 def register_signal_handlers():
     Video = get_video_model()
     VideoTranscode = Video.get_transcode_model()
-    VideoTrack = Video.get_track_model()
 
     post_save.connect(video_post_save, sender=Video)
     post_delete.connect(post_delete_file_cleanup, sender=Video)
     post_delete.connect(post_delete_file_cleanup, sender=VideoTranscode)
     post_delete.connect(post_delete_file_cleanup, sender=VideoTrack)
-

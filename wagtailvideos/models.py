@@ -1,3 +1,6 @@
+from wagtailvideos import get_video_model_string
+from modelcluster.models import ClusterableModel
+from modelcluster.fields import ParentalKey
 import logging
 import mimetypes
 import os
@@ -73,7 +76,7 @@ def get_upload_to(instance, filename):
     return instance.get_upload_to(filename)
 
 
-class AbstractVideo(CollectionMember, index.Indexed, models.Model):
+class AbstractVideo(CollectionMember, index.Indexed, ClusterableModel):
     title = models.CharField(max_length=255, verbose_name=_('title'))
     file = models.FileField(
         verbose_name=_('file'), upload_to=get_upload_to)
@@ -314,8 +317,18 @@ class VideoTranscode(AbstractVideoTranscode):
         )
 
 
-class AbstractTrack(models.Model):
-    # TODO move to TextChoices once djang0 < 3 is dropped
+class TrackListing(ClusterableModel):
+    video = models.OneToOneField(
+        get_video_model_string(), on_delete=models.CASCADE,
+        related_name='tracks')
+
+    def __str__(self):
+        return self.video.title
+
+
+class VideoTrack(models.Model):
+    listing = ParentalKey(TrackListing, related_name='tracks', on_delete=models.CASCADE)
+    # TODO move to TextChoices once django < 3 is dropped
     track_kinds = [
         ('subtitles', 'Subtitles'),
         ('captions', 'Captions'),
@@ -345,10 +358,3 @@ class AbstractTrack(models.Model):
         folder_name = 'video_tracks'
         filename = self.file.field.storage.get_valid_name(filename)
         return os.path.join(folder_name, filename)
-
-    class Meta:
-        abstract = True
-
-
-class Track(AbstractTrack):
-    video = models.ForeignKey(Video, related_name='tracks', on_delete=models.CASCADE)
