@@ -77,7 +77,7 @@ def get_upload_to(instance, filename):
     return instance.get_upload_to(filename)
 
 
-class AbstractVideo(CollectionMember, index.Indexed, ClusterableModel):
+class AbstractVideo(CollectionMember, index.Indexed, models.Model):
     title = models.CharField(max_length=255, verbose_name=_('title'))
     file = models.FileField(
         verbose_name=_('file'), upload_to=get_upload_to)

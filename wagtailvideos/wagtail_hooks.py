@@ -23,6 +23,8 @@ Video = get_video_model()
 
 class TracksAdmin(ModelAdmin):
     model = TrackListing
+    menu_icon = 'openquote'
+    menu_label = 'Text tracks'
 
     list_display = ('__str__', 'track_count')
 
@@ -102,7 +104,7 @@ def register_images_menu_item():
 def hide_track_listing_main(request, menu_items):
     # Dumb but we need to remove the auto generated menu item because we add it to the video submenu
     if is_modeladmin_installed():
-        menu_items[:] = [item for item in menu_items if item.name != 'track-listings']
+        menu_items[:] = [item for item in menu_items if item.name != 'text-tracks']
 
 
 class VideoSummaryItem(SummaryItem):
