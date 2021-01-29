@@ -139,6 +139,10 @@ Same as Wagtail Images, a custom model can be used to replace the built in Video
             )
 
 
+Video text tracks:
+~~~~~~~~~~~~~~~~~~
+
+To enable the uploading and displaying of subtitles or captions you'll need to add ``wagtail.contrib.modeladmin`` to your installed apps.
 
 Future features
 ---------------
