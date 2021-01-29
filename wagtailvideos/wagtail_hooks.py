@@ -21,6 +21,22 @@ from .permissions import permission_policy
 Video = get_video_model()
 
 
+@modeladmin_register
+class TracksAdmin(ModelAdmin):
+    model = TrackListing
+
+    list_display = ('__str__', 'track_count')
+
+    def track_count(self, track_listing):
+        return track_listing.tracks.count()
+    track_count.short_description = 'No. tracks'
+
+    panels = [
+        VideoChooserPanel('video'),
+        InlinePanel('tracks', heading="Tracks")
+    ]
+
+
 @hooks.register('register_admin_urls')
 def register_admin_urls():
     return [
@@ -53,7 +69,8 @@ class VideoMenu(Menu):
     def menu_items_for_request(self, request):
         return [
             MenuItem(_('Manage videos'), reverse('wagtailvideos:index'),
-                     name='videos', classnames='icon icon-media', order=300)
+                     name='videos', classnames='icon icon-media', order=300),
+            TracksAdmin().get_menu_item(),
         ]
 
     def render_html(self, request):
@@ -70,6 +87,12 @@ def register_images_menu_item():
         _('Videos'), VideoMenu(),
         name='videos', classnames='icon icon-media', order=300
     )
+
+
+@hooks.register('construct_main_menu')
+def hide_track_listing_main(request, menu_items):
+    # Dumb but we need to remove the auto generated menu item because we add it to the video submenu
+    menu_items[:] = [item for item in menu_items if item.name != 'track-listings']
 
 
 class VideoSummaryItem(SummaryItem):
@@ -113,19 +136,3 @@ def register_media_search_area():
 @hooks.register('insert_global_admin_css')
 def summary_css():
     return format_html('<link rel="stylesheet" href="{}">', static('wagtailvideos/css/summary-override.css'))
-
-
-@modeladmin_register
-class TracksAdmin(ModelAdmin):
-    model = TrackListing
-
-    list_display = ('__str__', 'track_count')
-
-    def track_count(self, track_listing):
-        return track_listing.tracks.count()
-    track_count.short_description = 'No. tracks'
-
-    panels = [
-        VideoChooserPanel('video'),
-        InlinePanel('tracks', heading="Tracks")
-    ]
