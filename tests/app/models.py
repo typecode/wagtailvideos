@@ -33,7 +33,7 @@ class CustomVideoTranscode(AbstractVideoTranscode):
 
 class TestPage(Page):
     video_field = models.ForeignKey(
-        'wagtailvideos.Video', related_name='+', null=True, blank=True, on_delete=models.SET_NULL)
+        CustomVideoModel, related_name='+', null=True, blank=True, on_delete=models.SET_NULL)
 
     video_streamfield = StreamField([
         ('video', VideoChooserBlock())

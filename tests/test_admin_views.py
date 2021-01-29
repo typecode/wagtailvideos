@@ -235,9 +235,6 @@ class TestVideoEditView(TestCase, WagtailTestUtils):
             'title': "Edited",
         })
 
-        # Should redirect back to index
-        self.assertRedirects(response, reverse('wagtailvideos:index'))
-
         # Check that the video was edited
         video = Video.objects.get(id=self.video.id)
         self.assertEqual(video.title, "Edited")
@@ -253,9 +250,6 @@ class TestVideoEditView(TestCase, WagtailTestUtils):
             'title': "Edited",
             'file': SimpleUploadedFile('new.mp4', new_file.read(), "video/mp4"),
         })
-
-        # Should redirect back to index
-        self.assertRedirects(response, reverse('wagtailvideos:index'))
 
         # Check that the video file size changed (assume it changed to the correct value)
         video = Video.objects.get(id=self.video.id)
@@ -476,6 +470,7 @@ class TestMultipleVideoUploader(TestCase, WagtailTestUtils):
     """
     This tests the multiple video upload views located in wagtailvideos/views/multiple.py
     """
+
     def setUp(self):
         self.login()
 

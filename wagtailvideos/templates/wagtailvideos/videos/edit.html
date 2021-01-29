@@ -65,7 +65,8 @@
                     <dt>{% trans "Duration" %}</dt>
                     <dd>{{ video.formatted_duration }}</dd>
                     {% endif %}
-                    {% if usage_count_enabled %}
+                    {% usage_count_enabled as uc_enabled %}
+                    {% if uc_enabled %}
                         <dt>{% trans "Usage" %}</dt>
                         <dd>
                             <a href="{{ video.usage_url }}">{% blocktrans count usage_count=video.get_usage.count %}Used {{ usage_count }} time{% plural %}Used {{ usage_count }} times{% endblocktrans %}</a>

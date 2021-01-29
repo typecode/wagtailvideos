@@ -2,9 +2,9 @@ from __future__ import unicode_literals
 
 from django.template import Context, Template, TemplateSyntaxError
 from django.test import TestCase
-from tests.utils import create_test_video_file
+from tests.utils import create_test_video_file, create_test_vtt_file
 
-from wagtailvideos.models import Video
+from wagtailvideos.models import Video, TrackListing, VideoTrack
 
 
 class TestVideoTag(TestCase):
@@ -33,3 +33,14 @@ class TestVideoTag(TestCase):
             self.render_video_tag(None)
         except TemplateSyntaxError as e:
             self.assertEqual(str(e), 'video tag requires a Video object as the first parameter')
+
+    def test_render_tracks(self):
+        listing = TrackListing.objects.create(video=self.video)
+        track = VideoTrack.objects.create(
+            listing=listing,
+            file=create_test_vtt_file(),
+            label='Test subtitles',
+            kind='subtitles',
+            language='en',
+        )
+        self.assertInHTML(track.track_tag(), self.render_video_tag(self.video))
