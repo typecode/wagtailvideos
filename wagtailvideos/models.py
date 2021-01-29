@@ -180,7 +180,7 @@ class AbstractVideo(CollectionMember, index.Indexed, ClusterableModel):
 
     @classmethod
     def get_track_model(cls):
-        return cls.tracks.rel.related_model
+        return cls.tracks.related.related_model
 
     def video_tag(self, attrs=None):
         if attrs is None:
@@ -295,7 +295,7 @@ class AbstractVideoTranscode(models.Model):
                             upload_to=get_upload_to)
     error_message = models.TextField(blank=True)
 
-    @property
+    @ property
     def url(self):
         return self.file.url
 
@@ -349,6 +349,9 @@ class VideoTrack(models.Model):
         max_length=50,
         choices=[(v, k) for k, v in bcp47.languages.items()],
         default='en', blank=True, help_text='Required if type is "Subtitle"', unique=True)
+
+    def __str__(self):
+        return "{0} - {1}".format(self.label or self.get_kind_display(), self.get_language_display())
 
     @property
     def url(self):

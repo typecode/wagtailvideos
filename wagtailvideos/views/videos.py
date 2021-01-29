@@ -1,3 +1,4 @@
+from wagtail.contrib.modeladmin.helpers import AdminURLHelper
 from distutils.version import LooseVersion
 
 import wagtail
@@ -12,7 +13,7 @@ from wagtail.admin.forms.search import SearchForm
 from wagtail.core.models import Collection
 from wagtail.search.backends import get_search_backends
 
-from wagtailvideos import ffmpeg, get_video_model
+from wagtailvideos import ffmpeg, get_video_model, is_modeladmin_installed
 from wagtailvideos.forms import VideoTranscodeAdminForm, get_video_form
 from wagtailvideos.permissions import permission_policy
 
@@ -117,6 +118,15 @@ def edit(request, video_id):
         ).format(video.title), buttons=[
             messages.button(reverse('wagtailvideos:delete', args=(video.id,)), _('Delete'))
         ])
+    if is_modeladmin_installed():
+        tracks_listing = video.tracks
+        url_helper = AdminURLHelper(Video.get_track_model())
+        if tracks_listing:
+            action_url = url_helper.get_action_url('edit', instance_pk=tracks_listing.pk)
+        else:
+            action_url = url_helper.create_url
+    else:
+        action_url = ''
 
     return render(request, "wagtailvideos/videos/edit.html", {
         'video': video,
@@ -125,6 +135,7 @@ def edit(request, video_id):
         'can_transcode': ffmpeg.installed(),
         'transcodes': video.transcodes.all(),
         'transcode_form': VideoTranscodeAdminForm(video=video),
+        'tracks_action_url': action_url,
         'user_can_delete': permission_policy.user_has_permission_for_instance(request.user, 'delete', video)
     })
 

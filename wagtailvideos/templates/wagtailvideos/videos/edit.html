@@ -41,9 +41,6 @@
                     {% include "wagtailadmin/shared/field_as_li.html" with li_classes="label-above label-uppercase" %}
                   {% endif %}
                   {% endfor %}
-            </ul>
-                <h2 class="u-text-transform-uppercase">Tracks</h2>
-                <p>Add/edit subtitles or accessibility captions for you video. For information about the filetype that should be used see the mozilla docs on <a href="https://developer.mozilla.org/en-US/docs/Web/API/WebVTT_API">WebVTT</a></p>
                 <li>
                     <input type="submit" class="button" value="{% trans 'Save' %}" /> {% if user_can_delete %}
                     <a href="{% url 'wagtailvideos:delete' video.id %}" class="button button-secondary no">{% trans "Delete video" %}</a> {% endif %}
@@ -110,6 +107,20 @@
         {% else %}
             <br/><br/>
             <span class='transcode-error'>Ffmpeg is not found on your server. Please install if you wish to transcode videos into an HTML5 video compliant format.</span>
+        {% endif %}
+        {% if tracks_action_url %}
+            <h2 class="u-text-transform-uppercase">Tracks</h2>
+            <p>You can add/edit subtitles or accessibility captions for you video. For information about the filetype that should be used see the mozilla docs on <a href="https://developer.mozilla.org/en-US/docs/Web/API/WebVTT_API">WebVTT</a></p>
+                {% if video.tracks %}
+                <ul>
+                {% for track in video.tracks.tracks.all %}
+                    <li>{{ track }}</li>
+                {% endfor %}
+                </ul>
+                <a class='button' href="{{ tracks_action_url }}">Edit</a>
+                {% else %}
+                <a class='button' href="{{ tracks_action_url }}">Add tracks</a>
+                {% endif %}
         {% endif %}
         </div>
     </div>

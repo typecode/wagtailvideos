@@ -12,7 +12,7 @@ from wagtail.admin.search import SearchArea
 from wagtail.admin.site_summary import SummaryItem
 from wagtail.core import hooks
 
-from wagtailvideos import get_video_model, urls
+from wagtailvideos import get_video_model, urls, is_modeladmin_installed
 from wagtailvideos.forms import GroupVideoPermissionFormSet
 from wagtailvideos.models import TrackListing
 
@@ -21,7 +21,6 @@ from .permissions import permission_policy
 Video = get_video_model()
 
 
-@modeladmin_register
 class TracksAdmin(ModelAdmin):
     model = TrackListing
 
@@ -35,6 +34,10 @@ class TracksAdmin(ModelAdmin):
         VideoChooserPanel('video'),
         InlinePanel('tracks', heading="Tracks")
     ]
+
+
+if is_modeladmin_installed():
+    modeladmin_register(TracksAdmin)
 
 
 @hooks.register('register_admin_urls')
@@ -69,7 +72,7 @@ class VideoMenu(Menu):
     def menu_items_for_request(self, request):
         return [
             MenuItem(_('Manage videos'), reverse('wagtailvideos:index'),
-                     name='videos', classnames='icon icon-media', order=300),
+                     name='videos', classnames='icon icon-media', order=100),
             TracksAdmin().get_menu_item(),
         ]
 
@@ -83,16 +86,23 @@ class VideoMenu(Menu):
 
 @hooks.register('register_admin_menu_item')
 def register_images_menu_item():
-    return SubmenuMenuItem(
-        _('Videos'), VideoMenu(),
-        name='videos', classnames='icon icon-media', order=300
-    )
+    if is_modeladmin_installed():
+        return SubmenuMenuItem(
+            _('Videos'), VideoMenu(),
+            name='videos', classnames='icon icon-media', order=300
+        )
+    else:
+        return MenuItem(
+            _('Videos'), reverse('wagtailvideos:index'),
+            name='videos', classnames='icon icon-media', order=300
+        )
 
 
 @hooks.register('construct_main_menu')
 def hide_track_listing_main(request, menu_items):
     # Dumb but we need to remove the auto generated menu item because we add it to the video submenu
-    menu_items[:] = [item for item in menu_items if item.name != 'track-listings']
+    if is_modeladmin_installed():
+        menu_items[:] = [item for item in menu_items if item.name != 'track-listings']
 
 
 class VideoSummaryItem(SummaryItem):
