@@ -21,6 +21,7 @@ setup(
         'wagtail>=2.4',
         'Django>=1.11',
         'django-enumchoicefield>=1.1.0',
+        'bcp47==0.0.4',
     ],
     extras_require={
         'testing': [

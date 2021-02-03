@@ -1,6 +1,12 @@
 CHANGELOG
 =========
 
+2.10.0
+------
+
+- Added ability to use custom models for Videos + Transcodes
+- Added a way to add VTT files to videos and render them
+
 2.9.0
 -----
 
