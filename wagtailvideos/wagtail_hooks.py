@@ -22,7 +22,7 @@ Video = get_video_model()
 
 
 class TracksAdmin(ModelAdmin):
-    model = TrackListing
+    model = Video.get_track_listing_model()
     menu_icon = 'openquote'
     menu_label = 'Text tracks'
 
