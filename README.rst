@@ -116,6 +116,7 @@ Same as Wagtail Images, a custom model can be used to replace the built in Video
 
     # app.videos.models
     from django.db import models
+    from modelcluster.fields import ParentalKey
     from wagtailvideos.models import AbstractVideo, AbstractVideoTranscode
 
     class AttributedVideo(AbstractVideo):
@@ -137,6 +138,13 @@ Same as Wagtail Images, a custom model can be used to replace the built in Video
             unique_together = (
                 ('video', 'media_format')
             )
+        
+    # Only needed if you are using the text tracks feature
+    class CustomTrackListing(AbstractTrackListing):
+        video = models.OneToOneField(AttributedVideo, related_name='track_listing', on_delete=models.CASCADE)
+
+    class CustomVideoTrack(AbstractVideoTrack):
+        listing = ParentalKey(CustomTrackListing, related_name='tracks', on_delete=models.CASCADE)
 
 
 Video text tracks:

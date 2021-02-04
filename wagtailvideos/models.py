@@ -15,6 +15,7 @@ from django.core.exceptions import SuspiciousFileOperation
 from django.core.files.base import ContentFile
 from django.db import models
 from django.forms.utils import flatatt
+from django.apps import apps
 from django.urls import reverse
 from django.utils.safestring import mark_safe
 from django.utils.translation import ugettext_lazy as _
@@ -179,6 +180,10 @@ class AbstractVideo(CollectionMember, index.Indexed, models.Model):
     def get_transcode_model(cls):
         return cls.transcodes.rel.related_model
 
+    @classmethod
+    def get_track_listing_model(cls):
+        return cls.track_listing.related.related_model
+
     def video_tag(self, attrs=None):
         if attrs is None:
             attrs = {}
@@ -222,7 +227,6 @@ class AbstractVideo(CollectionMember, index.Indexed, models.Model):
 
     class Meta:
         abstract = True
-        ordering = ['-created_at']
 
 
 class Video(AbstractVideo):
@@ -233,6 +237,9 @@ class Video(AbstractVideo):
         'thumbnail',
         'tags',
     )
+
+    class Meta:
+        ordering = ['-created_at']
 
 
 class TranscodingThread(threading.Thread):
@@ -319,17 +326,25 @@ class VideoTranscode(AbstractVideoTranscode):
         )
 
 
-class TrackListing(ClusterableModel):
-    video = models.OneToOneField(
-        get_video_model_string(), on_delete=models.CASCADE,
-        related_name='track_listing')
-
+class AbstractTrackListing(ClusterableModel):
     def __str__(self):
         return self.video.title
 
+    @classmethod
+    def get_track_model(cls):
+        return cls.tracks.rel.related_model
 
-class VideoTrack(Orderable):
-    listing = ParentalKey(TrackListing, related_name='tracks', on_delete=models.CASCADE)
+    class Meta:
+        abstract = True
+
+
+class TrackListing(AbstractTrackListing):
+    video = models.OneToOneField(
+        Video, on_delete=models.CASCADE,
+        related_name='track_listing')
+
+
+class AbstractVideoTrack(Orderable):
     # TODO move to TextChoices once django < 3 is dropped
     track_kinds = [
         ('subtitles', 'Subtitles'),
@@ -375,3 +390,10 @@ class VideoTrack(Orderable):
         folder_name = 'video_tracks'
         filename = self.file.field.storage.get_valid_name(filename)
         return os.path.join(folder_name, filename)
+
+    class Meta:
+        abstract = True
+
+
+class VideoTrack(AbstractVideoTrack):
+    listing = ParentalKey(TrackListing, related_name='tracks', on_delete=models.CASCADE)

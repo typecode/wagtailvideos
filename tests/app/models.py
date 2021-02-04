@@ -1,12 +1,14 @@
 from django.db import models
-from wagtail.core.models import Page
-from wagtail.core.fields import StreamField
-from wagtail.admin.edit_handlers import StreamFieldPanel
-
-from wagtailvideos.edit_handlers import VideoChooserPanel
-from wagtailvideos.blocks import VideoChooserBlock
-from wagtailvideos.models import AbstractVideo, AbstractVideoTranscode
 from modelcluster.fields import ParentalKey
+from wagtail.admin.edit_handlers import StreamFieldPanel
+from wagtail.core.fields import StreamField
+from wagtail.core.models import Page
+
+from wagtailvideos.blocks import VideoChooserBlock
+from wagtailvideos.edit_handlers import VideoChooserPanel
+from wagtailvideos.models import (
+    AbstractTrackListing, AbstractVideo, AbstractVideoTrack,
+    AbstractVideoTranscode)
 
 
 class CustomVideoModel(AbstractVideo):
@@ -29,6 +31,14 @@ class CustomVideoTranscode(AbstractVideoTranscode):
         unique_together = (
             ('video', 'media_format')
         )
+
+
+class CustomTrackListing(AbstractTrackListing):
+    video = models.OneToOneField(CustomVideoModel, related_name='track_listing', on_delete=models.CASCADE)
+
+
+class CustomVideoTrack(AbstractVideoTrack):
+    listing = ParentalKey(CustomTrackListing, related_name='tracks', on_delete=models.CASCADE)
 
 
 class TestPage(Page):
