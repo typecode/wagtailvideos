@@ -40,10 +40,12 @@
                   {% else %}
                     {% include "wagtailadmin/shared/field_as_li.html" with li_classes="label-above label-uppercase" %}
                   {% endif %}
-                  {% endfor %}
+                {% endfor %}
                 <li>
-                    <input type="submit" class="button" value="{% trans 'Save' %}" /> {% if user_can_delete %}
-                    <a href="{% url 'wagtailvideos:delete' video.id %}" class="button button-secondary no">{% trans "Delete video" %}</a> {% endif %}
+                    <input type="submit" class="button" value="{% trans 'Save' %}" />
+                    {% if user_can_delete %}
+                        <a href="{% url 'wagtailvideos:delete' video.id %}" class="button button-secondary no">{% trans "Delete video" %}</a>
+                    {% endif %}
                 </li>
             </ul>
         </form>
@@ -85,11 +87,15 @@
                 <ul>
                     {% for transcode in transcodes %}
                     <li>
-                        {{ transcode.media_format }} ({{ transcode.quality }} quality) {% if transcode.processing %} <span class='processing'>{% trans "(Processing... hold tight)" %} </span>{% endif %} {% if transcode.error_message %}
-                        <span class='transcode-error'>{% trans 'ERROR:' %}</span>
-                        <div class='transcode-error'>
-                            <pre> {{ transcode.error_message }}</pre>
-                        </div>
+                        {% blocktrans with media_format=transcode.media_format quality=transcode.quality %}{% endblocktrans %}{{ media_format }} ({{ quality }} quality){% endblocktrans %}
+                        {% if transcode.processing %}
+                            <span class='processing'>{% trans "(Processing... hold tight)" %} </span>
+                        {% endif %}
+                        {% if transcode.error_message %}
+                            <span class='transcode-error'>{% trans "ERROR:" %}</span>
+                            <div class='transcode-error'>
+                                <pre> {{ transcode.error_message }}</pre>
+                            </div>
                         {% endif %}
                     </li>
                     {% endfor %}
@@ -112,8 +118,8 @@
             {% endif %}
         {% endblock %}
         {% if tracks_action_url %}
-            <h2 class="u-text-transform-uppercase">Tracks</h2>
-            <p>You can add/edit subtitles or accessibility captions for this video. For information about the filetype that should be used see the mozilla docs on <a href="https://developer.mozilla.org/en-US/docs/Web/API/WebVTT_API">WebVTT</a></p>
+            <h2 class="u-text-transform-uppercase">{% trans "Tracks" %}</h2>
+            <p>{% trans 'You can add/edit subtitles or accessibility captions for this video. For information about the filetype that should be used see the mozilla docs on <a href="https://developer.mozilla.org/en-US/docs/Web/API/WebVTT_API">WebVTT</a>' %}</p>
                 {% if video.track_listing %}
                 <ul>
                 {% for track in video.track_listing.tracks.all %}
