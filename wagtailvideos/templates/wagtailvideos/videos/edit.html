@@ -76,39 +76,41 @@
             </div>
         </div>
         <div class="row" style='margin-top: 2em;'>
-        {% if can_transcode %}
-            <h2 class="u-text-transform-uppercase">Transcodes</h2>
-            <p>If you wish to generate HTML5 compliant transcodes use the form below. This may take a while depending on the length of the video.</p>
-            {% if transcodes %}
-            <h3 class="u-text-transform-uppercase">Available Transcodes</h3>
-            <ul>
-                {% for transcode in transcodes %}
-                <li>
-                    {{ transcode.media_format }} ({{ transcode.quality }} quality) {% if transcode.processing %} <span class='processing'>(Processing... hold tight) </span>{% endif %} {% if transcode.error_message %}
-                    <span class='transcode-error'>ERROR:</span>
-                    <div class='transcode-error'>
-                        <pre> {{ transcode.error_message }}</pre>
-                    </div>
-                    {% endif %}
-                </li>
-                {% endfor %}
-            </ul>
-            {% endif %}
-            <h3 class="u-text-transform-uppercase">Create transcode</h3>
-            <form action="{% url 'wagtailvideos:create_transcode' video.id %}" method="POST">
-                <ul class="fields">
-                    {% csrf_token %}
-                    {% include "wagtailadmin/shared/field_as_li.html" with field=transcode_form.media_format li_classes="label-above label-uppercase" %}
-                    {% include "wagtailadmin/shared/field_as_li.html" with field=transcode_form.quality li_classes="label-above label-uppercase" %}
+        {% block transcode %}
+            {% if can_transcode %}
+                <h2 class="u-text-transform-uppercase">{% trans "Transcodes" %}</h2>
+                <p>{% trans "If you wish to generate HTML5 compliant transcodes use the form below. This may take a while depending on the length of the video." %}</p>
+                {% if transcodes %}
+                <h3 class="u-text-transform-uppercase">{% trans "Available Transcodes" %}</h3>
+                <ul>
+                    {% for transcode in transcodes %}
                     <li>
-                        <input class="button" type='submit' value="Start" />
+                        {{ transcode.media_format }} ({{ transcode.quality }} quality) {% if transcode.processing %} <span class='processing'>{% trans "(Processing... hold tight)" %} </span>{% endif %} {% if transcode.error_message %}
+                        <span class='transcode-error'>{% trans 'ERROR:' %}</span>
+                        <div class='transcode-error'>
+                            <pre> {{ transcode.error_message }}</pre>
+                        </div>
+                        {% endif %}
                     </li>
+                    {% endfor %}
                 </ul>
-            </form>
-        {% else %}
-            <br/><br/>
-            <span class='transcode-error'>Ffmpeg is not found on your server. Please install if you wish to transcode videos into an HTML5 video compliant format.</span>
-        {% endif %}
+                {% endif %}
+                <h3 class="u-text-transform-uppercase">{% trans "Create transcode" %}</h3>
+                <form action="{% url 'wagtailvideos:create_transcode' video.id %}" method="POST">
+                    <ul class="fields">
+                        {% csrf_token %}
+                        {% include "wagtailadmin/shared/field_as_li.html" with field=transcode_form.media_format li_classes="label-above label-uppercase" %}
+                        {% include "wagtailadmin/shared/field_as_li.html" with field=transcode_form.quality li_classes="label-above label-uppercase" %}
+                        <li>
+                            <input class="button" type='submit' value="{% trans 'Start' %}" />
+                        </li>
+                    </ul>
+                </form>
+            {% else %}
+                <br/><br/>
+                <span class='transcode-error'>{% trans "Ffmpeg is not found on your server. Please install if you wish to transcode videos into an HTML5 video compliant format." %}</span>
+            {% endif %}
+        {% endblock %}
         {% if tracks_action_url %}
             <h2 class="u-text-transform-uppercase">Tracks</h2>
             <p>You can add/edit subtitles or accessibility captions for this video. For information about the filetype that should be used see the mozilla docs on <a href="https://developer.mozilla.org/en-US/docs/Web/API/WebVTT_API">WebVTT</a></p>
@@ -118,9 +120,9 @@
                     <li>{{ track }}</li>
                 {% endfor %}
                 </ul>
-                <a class='button' href="{{ tracks_action_url }}">Edit</a>
+                <a class='button' href="{{ tracks_action_url }}">{% trans "Edit" %}</a>
                 {% else %}
-                <a class='button' href="{{ tracks_action_url }}">Add tracks</a>
+                <a class='button' href="{{ tracks_action_url }}">{% trans "Add tracks" %}</a>
                 {% endif %}
         {% endif %}
         </div>
