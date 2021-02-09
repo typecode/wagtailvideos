@@ -114,7 +114,7 @@ def edit(request, video_id, callback=None):
     if form.is_valid():
         form.save()
 
-        # Reindex the image to make sure all tags are indexed
+        # Reindex the video to make sure all tags are indexed
         for backend in get_search_backends():
             backend.add(video)
 

@@ -100,7 +100,7 @@ def edit(request, video_id):
             video = form.save()
             video.save()
 
-            # Reindex the image to make sure all tags are indexed
+            # Reindex the video to make sure all tags are indexed
             for backend in get_search_backends():
                 backend.add(video)
 
@@ -111,7 +111,7 @@ def edit(request, video_id):
         form = VideoForm(instance=video)
 
     if not video._meta.get_field('file').storage.exists(video.file.name):
-        # Give error if image file doesn't exist
+        # Give error if video file doesn't exist
         messages.error(request, _(
             "The source video file could not be found. Please change the source or delete the video."
         ).format(video.title), buttons=[
