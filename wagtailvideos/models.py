@@ -365,7 +365,7 @@ class AbstractVideoTrack(Orderable):
     language = models.CharField(
         max_length=50,
         choices=[(v, k) for k, v in bcp47.languages.items()],
-        default='en', blank=True, help_text='Required if type is "Subtitle"', unique=True)
+        default='en', blank=True, help_text='Required if type is "Subtitle"')
 
     def track_tag(self):
         attrs = {
