@@ -24,7 +24,7 @@ class BaseVideoForm(BaseCollectionMemberForm):
             self.fields['file'].required = 'file' not in self.initial or not self.initial['file']
 
 
-# Callback to allow us to override the default form field for the image file field
+# Callback to allow us to override the default form field for the video file field
 def formfield_for_dbfield(db_field, **kwargs):
     # Check if this is the file field
     if db_field.name == 'file':
@@ -75,7 +75,7 @@ class VideoTranscodeAdminForm(forms.Form):
 GroupVideoPermissionFormSet = collection_member_permission_formset_factory(
     Video,
     [
-        ('add_video', _("Add"), _("Add/edit images you own")),
+        ('add_video', _("Add"), _("Add/edit videos you own")),
         ('change_video', _("Edit"), _("Edit any video")),
     ],
     'wagtailvideos/permissions/includes/video_permissions_formset.html'
