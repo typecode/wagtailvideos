@@ -1,5 +1,5 @@
-from wagtail.core.blocks import ChooserBlock
 from django.utils.functional import cached_property
+from wagtail.core.blocks import ChooserBlock
 
 
 class VideoChooserBlock(ChooserBlock):
