@@ -188,6 +188,9 @@ class AbstractVideo(CollectionMember, index.Indexed, models.Model):
     @classmethod
     def get_track_listing_model(cls):
         return cls.track_listing.related.related_model
+    
+    def get_current_transcodes(self):
+        return self.transcodes.exclude(processing=True).filter(error_message__exact='')
 
     def video_tag(self, attrs=None):
         if attrs is None:
@@ -197,7 +200,7 @@ class AbstractVideo(CollectionMember, index.Indexed, models.Model):
         if self.thumbnail:
             attrs['poster'] = self.thumbnail.url
 
-        transcodes = self.transcodes.exclude(processing=True).filter(error_message__exact='')
+        transcodes = self.get_current_transcodes()
         sources = []
         for transcode in transcodes:
             sources.append("<source src='{0}' type='video/{1}' >".format(transcode.url, transcode.media_format.name))

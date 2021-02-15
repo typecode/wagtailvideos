@@ -1,11 +1,11 @@
 {% extends "wagtailadmin/base.html" %}
 {% load wagtailvideos_tags %}
 {% load i18n %}
-{% block titletag %}{% trans "Delete image" %}{% endblock %}
+{% block titletag %}{% trans "Delete video" %}{% endblock %}
 
 {% block content %}
-    {% trans "Delete image" as del_str %}
-    {% include "wagtailadmin/shared/header.html" with title=del_str icon="image" %}
+    {% trans "Delete video" as del_str %}
+    {% include "wagtailadmin/shared/header.html" with title=del_str icon="media" %}
 
     <div class="row row-flush nice-padding">
         <div class="col6">

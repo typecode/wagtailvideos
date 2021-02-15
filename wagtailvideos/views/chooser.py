@@ -26,8 +26,8 @@ permission_checker = PermissionPolicyChecker(permission_policy)
 
 def get_video_json(video):
     """
-    helper function: given an image, return the json to pass back to the
-    image chooser panel
+    helper function: given a video, return the json to pass back to the
+    video chooser panel
     """
 
     return {
