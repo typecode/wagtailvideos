@@ -23,7 +23,7 @@ class TestVideoBlock(WagtailPageTests):
                 ('video', self.video.id)
             ])
         }))
-    
+
     def test_block_basic_render(self):
         page = self.root_page.add_child(instance=TestPage(
             title='Test',

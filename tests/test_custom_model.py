@@ -1,10 +1,11 @@
 from django.core.exceptions import ImproperlyConfigured
 from django.test import TestCase, override_settings
 from wagtail.tests.utils import WagtailTestUtils
+
+from tests.app.models import CustomVideoModel
 from wagtailvideos import get_video_model, get_video_model_string
 from wagtailvideos.models import Video
 
-from tests.app.models import CustomVideoModel
 
 class TestGetVideoModel(WagtailTestUtils, TestCase):
     @override_settings(WAGTAILVIDEOS_VIDEO_MODEL='app.CustomVideoModel')

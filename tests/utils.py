@@ -1,7 +1,8 @@
 import os
 
-import tests
 from django.core.files import File
+
+import tests
 
 
 def create_test_video_file():
