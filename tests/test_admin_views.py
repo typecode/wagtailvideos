@@ -231,7 +231,7 @@ class TestVideoEditView(TestCase, WagtailTestUtils):
         self.assertContains(response, expected_url)
 
     def test_edit(self):
-        response = self.post({
+        self.post({
             'title': "Edited",
         })
 
@@ -246,7 +246,7 @@ class TestVideoEditView(TestCase, WagtailTestUtils):
         self.video.save()
 
         new_file = create_test_video_file()
-        response = self.post({
+        self.post({
             'title': "Edited",
             'file': SimpleUploadedFile('new.mp4', new_file.read(), "video/mp4"),
         })
