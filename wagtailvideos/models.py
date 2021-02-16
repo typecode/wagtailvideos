@@ -172,6 +172,11 @@ class AbstractVideo(CollectionMember, index.Indexed, models.Model):
     def file_ext(self):
         return os.path.splitext(self.filename())[1][1:]
 
+    @property
+    def content_type(self):
+        mime = mimetypes.MimeTypes()
+        return mime.guess_type(self.url)[0] or mime.guess_type(self.filename())[0]
+
     def is_editable_by_user(self, user):
         from wagtailvideos.permissions import permission_policy
         return permission_policy.user_has_permission_for_instance(user, 'change', self)
@@ -200,9 +205,8 @@ class AbstractVideo(CollectionMember, index.Indexed, models.Model):
         for transcode in transcodes:
             sources.append("<source src='{0}' type='video/{1}' >".format(transcode.url, transcode.media_format.name))
 
-        mime = mimetypes.MimeTypes()
         sources.append("<source src='{0}' type='{1}'>"
-                       .format(self.url, mime.guess_type(self.url)[0]))
+                       .format(self.url, self.content_type))
 
         sources.append("<p>Sorry, your browser doesn't support playback for this video</p>")
 
