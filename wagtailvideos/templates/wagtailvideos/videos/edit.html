@@ -87,7 +87,7 @@
                 <ul>
                     {% for transcode in transcodes %}
                     <li>
-                        {% blocktrans with media_format=transcode.media_format quality=transcode.quality %}{% endblocktrans %}{{ media_format }} ({{ quality }} quality){% endblocktrans %}
+                        {% blocktrans with media_format=transcode.media_format quality=transcode.quality %}{{ media_format }} ({{ quality }} quality){% endblocktrans %}
                         {% if transcode.processing %}
                             <span class='processing'>{% trans "(Processing... hold tight)" %} </span>
                         {% endif %}
