@@ -10,8 +10,8 @@ from wagtail.core.models import Collection
 from wagtail.images.views.chooser import get_chooser_js_data
 from wagtail.search import index as search_index
 
-from wagtailvideos.forms import get_video_form
 from wagtailvideos import get_video_model
+from wagtailvideos.forms import get_video_form
 from wagtailvideos.permissions import permission_policy
 
 if LooseVersion(wagtail.__version__) >= LooseVersion('2.7'):

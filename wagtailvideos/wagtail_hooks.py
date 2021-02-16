@@ -1,20 +1,19 @@
-from wagtail.admin.edit_handlers import InlinePanel
-from wagtailvideos.edit_handlers import VideoChooserPanel
-from wagtail.contrib.modeladmin.options import ModelAdmin, modeladmin_register
 from django.conf.urls import include, url
 from django.templatetags.static import static
 from django.urls import reverse
 from django.utils.html import format_html
 from django.utils.safestring import mark_safe
 from django.utils.translation import ugettext_lazy as _
+from wagtail.admin.edit_handlers import InlinePanel
 from wagtail.admin.menu import Menu, MenuItem, SubmenuMenuItem
 from wagtail.admin.search import SearchArea
 from wagtail.admin.site_summary import SummaryItem
+from wagtail.contrib.modeladmin.options import ModelAdmin, modeladmin_register
 from wagtail.core import hooks
 
-from wagtailvideos import get_video_model, urls, is_modeladmin_installed
+from wagtailvideos import get_video_model, is_modeladmin_installed, urls
+from wagtailvideos.edit_handlers import VideoChooserPanel
 from wagtailvideos.forms import GroupVideoPermissionFormSet
-from wagtailvideos.models import TrackListing
 
 from .permissions import permission_policy
 

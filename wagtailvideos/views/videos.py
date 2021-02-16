@@ -1,4 +1,3 @@
-from wagtail.contrib.modeladmin.helpers import AdminURLHelper
 from distutils.version import LooseVersion
 
 import wagtail
@@ -10,6 +9,7 @@ from django.views.decorators.http import require_POST
 from django.views.decorators.vary import vary_on_headers
 from wagtail.admin import messages
 from wagtail.admin.forms.search import SearchForm
+from wagtail.contrib.modeladmin.helpers import AdminURLHelper
 from wagtail.core.models import Collection
 from wagtail.search.backends import get_search_backends
 

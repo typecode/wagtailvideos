@@ -15,7 +15,6 @@ from django.core.exceptions import SuspiciousFileOperation
 from django.core.files.base import ContentFile
 from django.db import models
 from django.forms.utils import flatatt
-from django.apps import apps
 from django.urls import reverse
 from django.utils.safestring import mark_safe
 from django.utils.translation import ugettext_lazy as _
@@ -26,8 +25,6 @@ from taggit.managers import TaggableManager
 from wagtail.core.models import CollectionMember, Orderable
 from wagtail.search import index
 from wagtail.search.queryset import SearchableQuerySetMixin
-
-from wagtailvideos import get_video_model_string
 
 if LooseVersion(wagtail.__version__) >= LooseVersion('2.7'):
     from wagtail.admin.models import get_object_usage
@@ -188,7 +185,7 @@ class AbstractVideo(CollectionMember, index.Indexed, models.Model):
     @classmethod
     def get_track_listing_model(cls):
         return cls.track_listing.related.related_model
-    
+
     def get_current_transcodes(self):
         return self.transcodes.exclude(processing=True).filter(error_message__exact='')
 
