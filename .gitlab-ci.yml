@@ -1,5 +1,6 @@
 stages:
   - test
+  - lint
   - release
 
 
@@ -28,6 +29,23 @@ lts_211:
   extends: .python_test
   before_script:
     - pip install .['testing'] wagtail~=2.11 django~=3.1
+
+
+flake8:
+    stage: lint
+    image: python:3.8
+    before_script:
+        - pip install flake8
+    script:
+        - flake8 wagtailvideos/ tests/
+
+isort:
+    stage: lint
+    image: python:3.8
+    before_script:
+        - pip install isort -e .
+    script:
+        - isort --recursive --diff --check-only wagtailvideos/ tests/
 
 build:
     image: python:3.8
