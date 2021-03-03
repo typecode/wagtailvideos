@@ -17,11 +17,10 @@
 </form>
 <div data-video-thumb="{{ video.id }}" class="thumb icon icon-media hasthumb">
     {% if video.thumbnail %}
-	<img src="{{ video.thumbnail.url }}" alt="{% trans 'Video thumbnail' %}" />
+    <img src="{{ video.thumbnail.url }}" alt="{% trans 'Video thumbnail' %}" />
     {% endif %}
 </div>
 <script>
-
-	var thumb = $("[data-video-thumb=\"" + {{ video.id }} + "\"]");
-	$("[data-thumb-target=\"" + {{ video.id }} + "\"]").append(thumb);
+    var thumb = $("[data-video-thumb=\"" + {{ video.id }} + "\"]");
+    $("[data-thumb-target=\"" + {{ video.id }} + "\"]").append(thumb);
 </script>

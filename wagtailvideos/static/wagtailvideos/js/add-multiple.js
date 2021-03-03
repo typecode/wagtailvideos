@@ -39,7 +39,11 @@ $(function() {
                 });
             }).done(function() {
                 data.context.find('.start').prop('disabled', false);
-                if (that._trigger('added', e, data) !== false && (options.autoUpload || data.autoUpload) && data.autoUpload !== false) {
+                if (
+                    that._trigger('added', e, data) !== false &&
+                    (options.autoUpload || data.autoUpload) &&
+                    data.autoUpload !== false
+                ) {
                     data.submit();
                 }
             }).fail(function() {
@@ -64,7 +68,7 @@ $(function() {
                 return false;
             }
 
-            var progress = Math.floor((data.loaded / data.total) * 100);
+            var progress = Math.floor(data.loaded / data.total * 100);
             data.context.each(function() {
                 $(this)
                     .find('.progress')
@@ -77,7 +81,7 @@ $(function() {
         },
 
         progressall: function(e, data) {
-            var progress = parseInt((data.loaded / data.total) * 100, 10);
+            var progress = parseInt(data.loaded / data.total * 100, 10);
             $('#overall-progress')
                 .addClass('active')
                 .attr('aria-valuenow', progress)
