@@ -10,14 +10,14 @@
             {% endif %}
         {% endfor %}
         <li>
-            <input class='button' type="submit" value="{% trans 'Update' %}" />
+            <input class="button" type="submit" value="{% trans 'Update' %}" />
             <a href="{% url 'wagtailvideos:delete_multiple' video.id %}" class="delete button button-secondary no">{% trans "Delete" %}</a>
         </li>
     </ul>
 </form>
-<div data-video-thumb="{{ video.id }}" class='thumb icon icon-media hasthumb'>
+<div data-video-thumb="{{ video.id }}" class="thumb icon icon-media hasthumb">
     {% if video.thumbnail %}
-	<img src="{{ video.thumbnail.url }}" />
+	<img src="{{ video.thumbnail.url }}" alt="{% trans 'Video thumbnail' %}" />
     {% endif %}
 </div>
 <script>
