@@ -13,7 +13,7 @@ var VIDEO_CHOOSER_MODAL_ONLOAD_HANDLERS = {
         });
 
         $('.pagination a', context).click(function () {
-            var page = this.getAttribute("data-page");
+            var page = this.getAttribute('data-page');
             setPage(page);
             return false;
         });
@@ -71,8 +71,8 @@ var VIDEO_CHOOSER_MODAL_ONLOAD_HANDLERS = {
             error: function (response, textStatus, errorThrown) {
                 var message = jsonData['error_message'] + '<br />' + errorThrown + ' - ' + response.status;
                 $('#upload').append(
-                    '<div class="help-block help-critical">' +
-                    '<strong>' + jsonData['error_label'] + ': </strong>' + message + '</div>');
+                    '<div class="help-block help-critical">' + '<strong>' + jsonData['error_label'] + ': </strong>' + message + '</div>'
+                );
             }
         });
 
@@ -91,7 +91,7 @@ var VIDEO_CHOOSER_MODAL_ONLOAD_HANDLERS = {
         currentTag = $(this).text();
         $('#id_q').val('');
         fetchResults({
-            'tag': currentTag,
+            tag: currentTag,
             collection_id: $('#collection_chooser_collection_id').val()
         });
         return false;
@@ -105,4 +105,4 @@ var VIDEO_CHOOSER_MODAL_ONLOAD_HANDLERS = {
       modal.respond('videoChosen', jsonData['result']);
       modal.close();
   },
-}
+};

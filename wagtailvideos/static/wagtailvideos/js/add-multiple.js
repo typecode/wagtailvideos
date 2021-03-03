@@ -23,8 +23,8 @@ $(function () {
         add: function (e, data) {
             $('.messages').empty();
             var $this = $(this);
-            var that = $this.data('blueimp-fileupload') || $this.data('fileupload')
-            var li = $($('#upload-list-item').html()).addClass('upload-uploading')
+            var that = $this.data('blueimp-fileupload') || $this.data('fileupload');
+            var li = $($('#upload-list-item').html()).addClass('upload-uploading');
             var options = that.options;
 
             $('#upload-list').append(li);
@@ -39,10 +39,8 @@ $(function () {
                 });
             }).done(function () {
                 data.context.find('.start').prop('disabled', false);
-                if ((that._trigger('added', e, data) !== false) &&
-                    (options.autoUpload || data.autoUpload) &&
-                    data.autoUpload !== false) {
-                    data.submit()
+                if (that._trigger('added', e, data) !== false && (options.autoUpload || data.autoUpload) && data.autoUpload !== false) {
+                    data.submit();
                 }
             }).fail(function () {
                 if (data.files.error) {
@@ -66,21 +64,26 @@ $(function () {
                 return false;
             }
 
-            var progress = Math.floor(data.loaded / data.total * 100);
+            var progress = Math.floor((data.loaded / data.total) * 100);
             data.context.each(function () {
-                $(this).find('.progress').addClass('active').attr('aria-valuenow', progress).find('.bar').css(
-                    'width',
-                    progress + '%'
-                ).html(progress + '%');
+                $(this)
+                    .find('.progress')
+                    .addClass('active')
+                    .attr('aria-valuenow', progress)
+                    .find('.bar')
+                    .css('width', progress + '%')
+                    .html(progress + '%');
             });
         },
 
         progressall: function (e, data) {
-            var progress = parseInt(data.loaded / data.total * 100, 10);
-            $('#overall-progress').addClass('active').attr('aria-valuenow', progress).find('.bar').css(
-                'width',
-                progress + '%'
-            ).html(progress + '%');
+            var progress = parseInt((data.loaded / data.total) * 100, 10);
+            $('#overall-progress')
+                .addClass('active')
+                .attr('aria-valuenow', progress)
+                .find('.bar')
+                .css('width', progress + '%')
+                .html(progress + '%');
 
             if (progress >= 100) {
                 $('#overall-progress').removeClass('active').find('.bar').css('width', '0%');
@@ -92,14 +95,13 @@ $(function () {
             var response = $.parseJSON(data.result);
 
             if (response.success) {
-                itemElement.addClass('upload-success')
+                itemElement.addClass('upload-success');
                 $('.preview', itemElement).attr('data-thumb-target', response.video_id);
                 $('.right', itemElement).append(response.form);
             } else {
                 itemElement.addClass('upload-failure');
                 $('.right .error_messages', itemElement).append(response.error_message);
             }
-
         },
 
         fail: function (e, data) {
@@ -124,7 +126,9 @@ $(function () {
             if (data.success) {
                 var statusText = $('.status-msg.update-success').text();
                 addMessage('success', statusText);
-                itemElement.slideUp(function () { $(this).remove() });
+                itemElement.slideUp(function () {
+                    $(this).remove();
+                });
             } else {
                 form.replaceWith(data.form);
 
@@ -144,9 +148,10 @@ $(function () {
 
         $.post(this.href, { csrfmiddlewaretoken: CSRFToken }, function (data) {
             if (data.success) {
-                itemElement.slideUp(function () { $(this).remove() });
+                itemElement.slideUp(function () {
+                    $(this).remove();
+                });
             }
         });
     });
-
 });
