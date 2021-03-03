@@ -189,6 +189,12 @@ class AbstractVideo(CollectionMember, index.Indexed, models.Model):
     def get_current_transcodes(self):
         return self.transcodes.exclude(processing=True).filter(error_message__exact='')
 
+    def get_tracks(self):
+        tracks = []
+        if hasattr(self, 'track_listing'):
+            tracks = [t.track_tag() for t in self.track_listing.tracks.all()]
+        return tracks
+
     def video_tag(self, attrs=None):
         if attrs is None:
             attrs = {}
@@ -207,12 +213,8 @@ class AbstractVideo(CollectionMember, index.Indexed, models.Model):
 
         sources.append("<p>Sorry, your browser doesn't support playback for this video</p>")
 
-        tracks = []
-        if hasattr(self, 'track_listing'):
-            tracks = [t.track_tag() for t in self.track_listing.tracks.all()]
-
         return mark_safe(
-            "<video {0}>\n{1}\n{2}\n</video>".format(flatatt(attrs), "\n".join(sources), "\n".join(tracks)))
+            "<video {0}>\n{1}\n{2}\n</video>".format(flatatt(attrs), "\n".join(sources), "\n".join(self.get_tracks())))
 
     def do_transcode(self, media_format, quality):
         transcode, created = self.transcodes.get_or_create(
