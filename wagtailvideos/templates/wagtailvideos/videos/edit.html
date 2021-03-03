@@ -59,7 +59,7 @@
                 <dl style='margin-top: 0'>
                     {% if video.thumbnail %}
                     <dt>{% trans "Thumbnail" %}</dt>
-                    <dd><img src="{{ video.thumbnail.url }}" /></dd>
+                    <dd><img src="{{ video.thumbnail.url }}" alt="{% trans 'Video thumbnail' %}" /></dd>
                     {% endif %}
                     <dt>{% trans "Filesize" %}</dt>
                     <dd>{% if filesize %}{{ filesize|filesizeformat }}{% else %}{% trans "File not found" %}{% endif %}</dd>
@@ -113,7 +113,7 @@
             </form>
         {% else %}
             <br/><br/>
-            <span class='transcode-error'>{% trans "Ffmpeg is not found on your server. Please install if you wish to transcode videos into an HTML5 video compliant format." %}</span>
+            <span class='transcode-error'>{% trans "Ffmpeg is not found on your server or you have disabled transcodes. Please install and enable transcodes if you wish to transcode videos into an HTML5 video compliant format." %}</span>
         {% endif %}
         {% if tracks_action_url %}
             <h2 class="u-text-transform-uppercase">{% trans "Tracks" %}</h2>
