@@ -1,18 +1,18 @@
-VIDEO_CHOOSER_MODAL_ONLOAD_HANDLERS = {
-  'chooser': function(modal, jsonData) {
+var VIDEO_CHOOSER_MODAL_ONLOAD_HANDLERS = {
+  'chooser': function (modal, jsonData) {
     var searchUrl = $('form.video-search', modal.body).attr('action');
 
     /* currentTag stores the tag currently being filtered on, so that we can
     preserve this when paginating */
     var currentTag;
 
-    function ajaxifyLinks (context) {
-        $('.listing a', context).click(function() {
+    function ajaxifyLinks(context) {
+        $('.listing a', context).click(function () {
             modal.loadUrl(this.href);
             return false;
         });
 
-        $('.pagination a', context).click(function() {
+        $('.pagination a', context).click(function () {
             var page = this.getAttribute("data-page");
             setPage(page);
             return false;
@@ -23,7 +23,7 @@ VIDEO_CHOOSER_MODAL_ONLOAD_HANDLERS = {
         $.ajax({
             url: searchUrl,
             data: requestData,
-            success: function(data, status) {
+            success: function (data, status) {
                 $('#image-results').html(data);
                 ajaxifyLinks($('#image-results'));
             }
@@ -42,8 +42,8 @@ VIDEO_CHOOSER_MODAL_ONLOAD_HANDLERS = {
     }
 
     function setPage(page) {
-        params = {p: page};
-        if ($('#id_q').val().length){
+        var params = { p: page };
+        if ($('#id_q').val().length) {
             params['q'] = $('#id_q').val();
         }
         if (currentTag) {
@@ -56,7 +56,7 @@ VIDEO_CHOOSER_MODAL_ONLOAD_HANDLERS = {
 
     ajaxifyLinks(modal.body);
 
-    $('form.video-upload', modal.body).submit(function() {
+    $('form.video-upload', modal.body).submit(function () {
         var formdata = new FormData(this);
         $.ajax({
             url: this.action,
@@ -65,14 +65,14 @@ VIDEO_CHOOSER_MODAL_ONLOAD_HANDLERS = {
             contentType: false,
             type: 'POST',
             dataType: 'text',
-            success: function(response){
+            success: function (response) {
                 modal.loadResponseText(response);
             },
-            error: function(response, textStatus, errorThrown) {
-              message = jsonData['error_message'] + '<br />' + errorThrown + ' - ' + response.status;
-                      $('#upload').append(
-                          '<div class="help-block help-critical">' +
-                          '<strong>' + jsonData['error_label'] + ': </strong>' + message + '</div>');
+            error: function (response, textStatus, errorThrown) {
+                var message = jsonData['error_message'] + '<br />' + errorThrown + ' - ' + response.status;
+                $('#upload').append(
+                    '<div class="help-block help-critical">' +
+                    '<strong>' + jsonData['error_label'] + ': </strong>' + message + '</div>');
             }
         });
 
@@ -81,13 +81,13 @@ VIDEO_CHOOSER_MODAL_ONLOAD_HANDLERS = {
 
     $('form.video-search', modal.body).submit(search);
 
-    $('#id_q').on('input', function() {
+    $('#id_q').on('input', function () {
         clearTimeout($.data(this, 'timer'));
         var wait = setTimeout(search, 200);
         $(this).data('timer', wait);
     });
     $('#collection_chooser_collection_id').change(search);
-    $('a.suggested-tag').click(function() {
+    $('a.suggested-tag').click(function () {
         currentTag = $(this).text();
         $('#id_q').val('');
         fetchResults({
@@ -101,7 +101,7 @@ VIDEO_CHOOSER_MODAL_ONLOAD_HANDLERS = {
     //     autocomplete: {source: "{{ autocomplete_url|addslashes }}"}
     // });
   },
-  'video_chosen': function(modal, jsonData) {
+  'video_chosen': function (modal, jsonData) {
       modal.respond('videoChosen', jsonData['result']);
       modal.close();
   },
