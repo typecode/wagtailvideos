@@ -1,4 +1,4 @@
-$(function () {
+$(function() {
     // Redirect users that don't support filereader
     if (!$('html').hasClass('filereader')) {
         document.location.href = window.fileupload_opts.simple_upload_url;
@@ -6,7 +6,7 @@ $(function () {
     }
 
     // prevents browser default drag/drop
-    $(document).bind('drop dragover', function (e) {
+    $(document).bind('drop dragover', function(e) {
         e.preventDefault();
     });
 
@@ -20,7 +20,7 @@ $(function () {
             acceptFileTypes: window.fileupload_opts.errormessages.accepted_file_types,
             maxFileSize: window.fileupload_opts.errormessages.max_file_size
         },
-        add: function (e, data) {
+        add: function(e, data) {
             $('.messages').empty();
             var $this = $(this);
             var that = $this.data('blueimp-fileupload') || $this.data('fileupload');
@@ -30,21 +30,21 @@ $(function () {
             $('#upload-list').append(li);
             data.context = li;
 
-            data.process(function () {
+            data.process(function() {
                 return $this.fileupload('process', data);
-            }).always(function () {
+            }).always(function() {
                 data.context.removeClass('processing');
-                data.context.find('.left').each(function (index, elm) {
+                data.context.find('.left').each(function(index, elm) {
                     $(elm).append(escapeHtml(data.files[index].name));
                 });
-            }).done(function () {
+            }).done(function() {
                 data.context.find('.start').prop('disabled', false);
                 if (that._trigger('added', e, data) !== false && (options.autoUpload || data.autoUpload) && data.autoUpload !== false) {
                     data.submit();
                 }
-            }).fail(function () {
+            }).fail(function() {
                 if (data.files.error) {
-                    data.context.each(function (index) {
+                    data.context.each(function(index) {
                         var error = data.files[index].error;
                         if (error) {
                             $(this).find('.error_messages').text(error);
@@ -54,18 +54,18 @@ $(function () {
             });
         },
 
-        processfail: function (e, data) {
+        processfail: function(e, data) {
             var itemElement = $(data.context);
             itemElement.removeClass('upload-uploading').addClass('upload-failure');
         },
 
-        progress: function (e, data) {
+        progress: function(e, data) {
             if (e.isDefaultPrevented()) {
                 return false;
             }
 
             var progress = Math.floor((data.loaded / data.total) * 100);
-            data.context.each(function () {
+            data.context.each(function() {
                 $(this)
                     .find('.progress')
                     .addClass('active')
@@ -76,7 +76,7 @@ $(function () {
             });
         },
 
-        progressall: function (e, data) {
+        progressall: function(e, data) {
             var progress = parseInt((data.loaded / data.total) * 100, 10);
             $('#overall-progress')
                 .addClass('active')
@@ -90,7 +90,7 @@ $(function () {
             }
         },
 
-        done: function (e, data) {
+        done: function(e, data) {
             var itemElement = $(data.context);
             var response = $.parseJSON(data.result);
 
@@ -104,29 +104,29 @@ $(function () {
             }
         },
 
-        fail: function (e, data) {
+        fail: function(e, data) {
             var itemElement = $(data.context);
             itemElement.addClass('upload-failure');
         },
 
-        always: function (e, data) {
+        always: function(e, data) {
             var itemElement = $(data.context);
             itemElement.removeClass('upload-uploading').addClass('upload-complete');
         }
     });
 
     // ajax-enhance forms added on done()
-    $('#upload-list').on('submit', 'form', function (e) {
+    $('#upload-list').on('submit', 'form', function(e) {
         var form = $(this);
         var itemElement = form.closest('#upload-list > li');
 
         e.preventDefault();
 
-        $.post(this.action, form.serialize(), function (data) {
+        $.post(this.action, form.serialize(), function(data) {
             if (data.success) {
                 var statusText = $('.status-msg.update-success').text();
                 addMessage('success', statusText);
-                itemElement.slideUp(function () {
+                itemElement.slideUp(function() {
                     $(this).remove();
                 });
             } else {
@@ -138,7 +138,7 @@ $(function () {
         });
     });
 
-    $('#upload-list').on('click', '.delete', function (e) {
+    $('#upload-list').on('click', '.delete', function(e) {
         var form = $(this).closest('form');
         var itemElement = form.closest('#upload-list > li');
 
@@ -146,9 +146,9 @@ $(function () {
 
         var CSRFToken = $('input[name="csrfmiddlewaretoken"]', form).val();
 
-        $.post(this.href, { csrfmiddlewaretoken: CSRFToken }, function (data) {
+        $.post(this.href, { csrfmiddlewaretoken: CSRFToken }, function(data) {
             if (data.success) {
-                itemElement.slideUp(function () {
+                itemElement.slideUp(function() {
                     $(this).remove();
                 });
             }
