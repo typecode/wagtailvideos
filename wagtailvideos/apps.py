@@ -1,4 +1,5 @@
 from django.apps import AppConfig
+from django.conf import settings
 from django.core.checks import Warning, register
 
 from wagtailvideos import ffmpeg
@@ -6,7 +7,10 @@ from wagtailvideos import ffmpeg
 
 def ffmpeg_check(app_configs, **kwargs):
     messages = []
-    if not ffmpeg.installed():
+    if (
+        not ffmpeg.installed()
+        and not getattr(settings, 'WAGTAIL_VIDEOS_DISABLE_TRANSCODE', False)
+    ):
         messages.append(
             Warning(
                 'ffmpeg could not be found on your system. Transcoding will be disabled',

@@ -51,15 +51,15 @@
         </form>
     </div>
     <div class="col6">
-        <div class='row'>
-            <div class='col10 divider-after'>
+        <div class="row">
+            <div class="col10 divider-after">
                 {% video video controls style=max-width:100%;width:100%;height:auto; %}
             </div>
-            <div class='col2'>
-                <dl style='margin-top: 0'>
+            <div class="col2">
+                <dl style="margin-top: 0;">
                     {% if video.thumbnail %}
                     <dt>{% trans "Thumbnail" %}</dt>
-                    <dd><img src="{{ video.thumbnail.url }}" /></dd>
+                    <dd><img src="{{ video.thumbnail.url }}" alt="{% trans 'Video thumbnail' %}" /></dd>
                     {% endif %}
                     <dt>{% trans "Filesize" %}</dt>
                     <dd>{% if filesize %}{{ filesize|filesizeformat }}{% else %}{% trans "File not found" %}{% endif %}</dd>
@@ -77,7 +77,7 @@
                 </dl>
             </div>
         </div>
-        <div class="row" style='margin-top: 2em;'>
+        <div class="row" style="margin-top: 2em;">
         {% if can_transcode %}
             <h2 class="u-text-transform-uppercase">{% trans "Transcodes" %}</h2>
             <p>{% trans "If you wish to generate HTML5 compliant transcodes use the form below. This may take a while depending on the length of the video." %}</p>
@@ -88,11 +88,11 @@
                 <li>
                     {% blocktrans with media_format=transcode.media_format quality=transcode.quality %}{{ media_format }} ({{ quality }} quality){% endblocktrans %}
                     {% if transcode.processing %}
-                        <span class='processing'>{% trans "(Processing... hold tight)" %} </span>
+                        <span class="processing">{% trans "(Processing... hold tight)" %} </span>
                     {% endif %}
                     {% if transcode.error_message %}
-                        <span class='transcode-error'>{% trans "ERROR:" %}</span>
-                        <div class='transcode-error'>
+                        <span class="transcode-error">{% trans "ERROR:" %}</span>
+                        <div class="transcode-error">
                             <pre> {{ transcode.error_message }}</pre>
                         </div>
                     {% endif %}
@@ -107,13 +107,13 @@
                     {% include "wagtailadmin/shared/field_as_li.html" with field=transcode_form.media_format li_classes="label-above label-uppercase" %}
                     {% include "wagtailadmin/shared/field_as_li.html" with field=transcode_form.quality li_classes="label-above label-uppercase" %}
                     <li>
-                        <input class="button" type='submit' value="{% trans 'Start' %}" />
+                        <input class="button" type="submit" value="{% trans 'Start' %}" />
                     </li>
                 </ul>
             </form>
         {% else %}
             <br/><br/>
-            <span class='transcode-error'>{% trans "Ffmpeg is not found on your server. Please install if you wish to transcode videos into an HTML5 video compliant format." %}</span>
+            <span class="transcode-error">{% trans "Ffmpeg is not found on your server or you have disabled transcodes. Please install Ffmepg and make sure that transcoding is enabled if you wish to transcode videos into an HTML5 video compliant format." %}</span>
         {% endif %}
         {% if tracks_action_url %}
             <h2 class="u-text-transform-uppercase">{% trans "Tracks" %}</h2>
@@ -124,9 +124,9 @@
                     <li>{{ track }}</li>
                 {% endfor %}
                 </ul>
-                <a class='button' href="{{ tracks_action_url }}">{% trans "Edit" %}</a>
+                <a class="button" href="{{ tracks_action_url }}">{% trans "Edit" %}</a>
                 {% else %}
-                <a class='button' href="{{ tracks_action_url }}">{% trans "Add tracks" %}</a>
+                <a class="button" href="{{ tracks_action_url }}">{% trans "Add tracks" %}</a>
                 {% endif %}
         {% endif %}
         </div>

@@ -62,7 +62,7 @@ In a Streamfield:
 A VideoChooserBlock is included
 
 .. code:: python
-  
+
   from wagtail.admin.edit_handlers import StreamFieldPanel
   from wagtail.core.fields import StreamField
   from wagtail.core.models import Page
@@ -103,10 +103,21 @@ be used to create new transcodes. It is assumed that your compiled
 version of ffmpeg has the matching codec libraries required for the
 transcode.
 
+
+Disable transcode:
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Transcode can be disabled using the ``WAGTAIL_VIDEOS_DISABLE_TRANSCODE`` setting.
+
+.. code:: django
+
+    # settings.py
+    WAGTAIL_VIDEOS_DISABLE_TRANSCODE = True
+
 Custom Video models:
 ~~~~~~~~~~~~~~~~~~~~
 
-Same as Wagtail Images, a custom model can be used to replace the built in Video model using the 
+Same as Wagtail Images, a custom model can be used to replace the built in Video model using the
 ``WAGTAILVIDEOS_VIDEO_MODEL`` setting.
 
 .. code:: django
@@ -138,7 +149,7 @@ Same as Wagtail Images, a custom model can be used to replace the built in Video
             unique_together = (
                 ('video', 'media_format')
             )
-        
+
     # Only needed if you are using the text tracks feature
     class CustomTrackListing(AbstractTrackListing):
         video = models.OneToOneField(AttributedVideo, related_name='track_listing', on_delete=models.CASCADE)
