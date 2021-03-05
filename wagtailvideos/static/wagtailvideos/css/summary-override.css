@@ -14,5 +14,5 @@ section.summary > .stats > li {
 @media only screen and (max-width: 50em) {
     section.summary > .stats {
        grid-template-columns: repeat(2, 1fr);
-    }   
+    }
 }

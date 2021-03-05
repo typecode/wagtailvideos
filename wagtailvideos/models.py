@@ -131,7 +131,6 @@ class AbstractVideo(CollectionMember, index.Indexed, models.Model):
             if too_long > len(head) + 1:
                 raise SuspiciousFileOperation('File name can not be shortened to a safe length')
             filename = head[:-too_long] + ext
-            file_path = os.path.join(folder_name, filename)
         return os.path.join(folder_name, filename)
 
     def get_usage(self):
@@ -143,7 +142,7 @@ class AbstractVideo(CollectionMember, index.Indexed, models.Model):
 
     @property
     def formatted_duration(self):
-        if(self.duration):
+        if self.duration:
             hours, remainder = divmod(self.duration.seconds, 3600)
             minutes, seconds = divmod(remainder, 60)
             return "%d:%02d:%02d" % (hours, minutes, seconds)
@@ -327,9 +326,7 @@ class VideoTranscode(AbstractVideoTranscode):
     video = models.ForeignKey(Video, related_name='transcodes', on_delete=models.CASCADE)
 
     class Meta:
-        unique_together = (
-            ('video', 'media_format')
-        )
+        unique_together = ('video', 'media_format')
 
 
 class AbstractTrackListing(ClusterableModel):

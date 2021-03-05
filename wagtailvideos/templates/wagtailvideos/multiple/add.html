@@ -3,7 +3,7 @@
 {% block titletag %}{% trans "Add multiple videos" %}{% endblock %}
 {% block extra_css %}
     {{ block.super }}
-	<!-- it's cheating but we're  just going to use wagtailimages css since they should look identical anyways -->
+    <!-- it's cheating but we're  just going to use wagtailimages css since they should look identical anyways -->
     <link rel="stylesheet" href="{% static 'wagtailimages/css/add-multiple.css' %}" type="text/css" />
 {% endblock %}
 
@@ -14,7 +14,7 @@
     <div class="nice-padding">
         <div class="drop-zone">
             <p>{% trans "Drag and drop videos into this area to upload immediately." %}</p>
-            <p>{{ help_text }}
+            <p>{{ help_text }}</p>
 
             <form action="{% url 'wagtailvideos:add_multiple' %}" method="POST" enctype="multipart/form-data">
                 <div class="replace-file-input">
@@ -84,7 +84,7 @@
                 max_file_size: "{{ error_max_file_size }}",
                 accepted_file_types: "{{ error_accepted_file_types }}"
             }
-        }
+        };
         window.tagit_opts = {
             autocomplete: {source: "{{ autocomplete_url|addslashes }}"}
         };

@@ -12,7 +12,7 @@ def video(parser, token):
     extra_attrs = {}
 
     # Everyting after video expression
-    if(len(template_params) > 1):
+    if len(template_params) > 1:
         for param in template_params[1:]:
             try:
                 name, value = param.split('=')
