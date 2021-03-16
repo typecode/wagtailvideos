@@ -1,6 +1,11 @@
 CHANGELOG
 =========
 
+2.10.5
+------
+
+- Changed default thumbnail generation to match video size
+
 2.10.0
 ------
 
