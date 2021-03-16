@@ -60,7 +60,7 @@ def get_thumbnail(file_path):
                 '-vcodec', 'mjpeg',
                 '-vframes', '1',
                 '-an', '-f', 'rawvideo',
-                '-vf', 'scale=iw:-1', # Make thumbnail the size & aspect ratio of the input video
+                '-vf', 'scale=iw:-1',  # Make thumbnail the size & aspect ratio of the input video
                 output_file,
             ], stdin=DEVNULL(), stdout=DEVNULL())
         except subprocess.CalledProcessError:
