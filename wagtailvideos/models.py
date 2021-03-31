@@ -42,7 +42,7 @@ class VideoQuality(ChoiceEnum):
 
 class MediaFormats(ChoiceEnum):
     webm = 'VP8 and Vorbis in WebM'
-    mp4 = 'H.264 and MP3 in Mp4'
+    mp4 = 'H.264 and AAC in Mp4'
     ogg = 'Theora and Vorbis in Ogg'
 
     def get_quality_param(self, quality):
@@ -279,7 +279,7 @@ class TranscodingThread(threading.Thread):
                     '-codec:v', 'libx264',
                     '-preset', 'slow',  # TODO Checkout other presets
                     '-crf', quality_param,
-                    '-codec:a', 'copy',
+                    '-codec:a', 'aac',
                     output_file,
                 ], stdin=FNULL, stderr=subprocess.STDOUT)
             elif media_format is MediaFormats.webm:
