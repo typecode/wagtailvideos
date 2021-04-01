@@ -1,6 +1,12 @@
 CHANGELOG
 =========
 
+2.10.6
+------
+
+- Default audio codec for mp4 changed to AAC
+
+
 2.10.5
 ------
 
