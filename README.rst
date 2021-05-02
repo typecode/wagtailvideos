@@ -24,7 +24,13 @@ Install using pypi
 
     pip install wagtailvideos
 
+Add `wagtailvideos` to your installed apps.
 
+.. code:: python
+    INSTALLED_APPS = [
+        'wagtailvideos',
+    ]
+    
 Using
 -----
 
