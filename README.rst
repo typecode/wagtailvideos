@@ -12,7 +12,7 @@ html5 compliant codec using ffmpeg.
 Requirements
 ------------
 
--  Wagtail >= 2.4
+-  Wagtail >= 2.5
 -  `ffmpeg <https://ffmpeg.org/>`__
 
 Installing

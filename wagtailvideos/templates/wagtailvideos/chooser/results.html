@@ -29,6 +29,5 @@
             </li>
         {% endfor %}
     </ul>
-
-    {% include "wagtailadmin/shared/pagination_nav.html" with items=videos is_ajax=1 %}
+    {% include "wagtailadmin/shared/ajax_pagination_nav.html" with items=videos %}
 {% endif %}

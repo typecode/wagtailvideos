@@ -10,7 +10,7 @@ from setuptools import find_packages, setup  # noqa: E4
 
 setup(
     name='wagtailvideos',
-    version='2.10.7',
+    version='2.10.8',
     description="A wagtail module for uploading and displaying videos in various codecs.",
     long_description=readme,
     author='Neon Jungle',
@@ -18,7 +18,7 @@ setup(
     url='https://github.com/neon-jungle/wagtailvideos',
 
     install_requires=[
-        'wagtail>=2.4',
+        'wagtail>=2.5',
         'Django>=1.11',
         'django-enumchoicefield>=1.1.0',
         'bcp47==0.0.4',
