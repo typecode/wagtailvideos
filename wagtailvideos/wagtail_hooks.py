@@ -2,7 +2,6 @@ from django.conf.urls import include, url
 from django.templatetags.static import static
 from django.urls import reverse
 from django.utils.html import format_html
-from django.utils.safestring import mark_safe
 from django.utils.translation import ugettext_lazy as _
 from wagtail.admin.edit_handlers import InlinePanel
 from wagtail.admin.menu import Menu, MenuItem, SubmenuMenuItem
