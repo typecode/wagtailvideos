@@ -24,6 +24,7 @@ lts_211:
 
 lts_215:
   image: python:3.10
+  extends: .python_test
   before_script:
     - pip install .['testing'] wagtail~=2.15 django~=4.0
 
