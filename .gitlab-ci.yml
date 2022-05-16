@@ -3,7 +3,6 @@ stages:
   - lint
   - release
 
-
 .python_test:
   stage: test
   script:
@@ -17,42 +16,40 @@ head:
   before_script:
     - pip install .['testing']
 
-lts_27:
-  extends: .python_test
-  image: python:3.7
-  before_script:
-    - pip install .['testing'] wagtail~=2.7 django~=2.2
-
 lts_211:
   image: python:3.8
   extends: .python_test
   before_script:
     - pip install .['testing'] wagtail~=2.11 django~=3.1
 
+lts_215:
+  image: python:3.10
+  before_script:
+    - pip install .['testing'] wagtail~=2.15 django~=4.0
 
 flake8:
-    stage: lint
-    image: python:3.8
-    before_script:
-        - pip install flake8
-    script:
-        - flake8 wagtailvideos/ tests/
+  stage: lint
+  image: python:3.8
+  before_script:
+    - pip install flake8
+  script:
+    - flake8 wagtailvideos/ tests/
 
 isort:
-    stage: lint
-    image: python:3.8
-    before_script:
-        - pip install isort -e .
-    script:
-        - isort --recursive --diff --check-only wagtailvideos/ tests/
+  stage: lint
+  image: python:3.8
+  before_script:
+    - pip install isort -e .
+  script:
+    - isort --recursive --diff --check-only wagtailvideos/ tests/
 
 build:
-    image: python:3.8
-    stage: release
-    before_script:
-        - pip install --upgrade setuptools wheel twine
-    script:
-        - ./setup.py sdist bdist_wheel
-        - twine upload dist/*
-    only:
-        - tags
+  image: python:3.8
+  stage: release
+  before_script:
+    - pip install --upgrade setuptools wheel twine
+  script:
+    - ./setup.py sdist bdist_wheel
+    - twine upload dist/*
+  only:
+    - tags
