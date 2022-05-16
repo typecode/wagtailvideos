@@ -1,6 +1,12 @@
 CHANGELOG
 =========
 
+2.11.0
+------
+
+- Preliminary django 4 Support
+
+
 2.10.6
 ------
 
