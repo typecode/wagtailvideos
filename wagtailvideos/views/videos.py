@@ -5,7 +5,7 @@ from django.conf import settings
 from django.core.paginator import Paginator
 from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse
-from django.utils.translation import ugettext as _
+from django.utils.translation import gettext as _
 from django.views.decorators.http import require_POST
 from django.views.decorators.vary import vary_on_headers
 from wagtail.admin import messages
@@ -60,7 +60,7 @@ def index(request):
     page = paginator.get_page(request.GET.get('p'))
 
     # Create response
-    if request.is_ajax():
+    if request.headers.get('x-requested-with') == 'XMLHttpRequest':
         response = render(request, 'wagtailvideos/videos/results.html', {
             'videos': page,
             'query_string': query_string,

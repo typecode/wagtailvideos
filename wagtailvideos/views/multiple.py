@@ -4,7 +4,7 @@ import wagtail
 from django.http import HttpResponseBadRequest, JsonResponse
 from django.shortcuts import get_object_or_404, render
 from django.template.loader import render_to_string
-from django.utils.encoding import force_text
+from django.utils.encoding import force_str
 from django.views.decorators.http import require_POST
 from django.views.decorators.vary import vary_on_headers
 from wagtail.search.backends import get_search_backends
@@ -48,7 +48,7 @@ def add(request):
         collections_to_choose = None
 
     if request.method == 'POST':
-        if not request.is_ajax():
+        if request.headers.get('x-requested-with') != 'XMLHttpRequest':
             return HttpResponseBadRequest("Cannot POST to this view without AJAX")
 
         if not request.FILES:
@@ -83,7 +83,7 @@ def add(request):
                 'success': False,
 
                 # https://github.com/django/django/blob/stable/1.6.x/django/forms/util.py#L45
-                'error_message': '\n'.join(['\n'.join([force_text(i) for i in v]) for k, v in form.errors.items()]),
+                'error_message': '\n'.join(['\n'.join([force_str(i) for i in v]) for k, v in form.errors.items()]),
             })
     else:
         form = VideoForm()
@@ -104,7 +104,7 @@ def edit(request, video_id, callback=None):
 
     video = get_object_or_404(Video, id=video_id)
 
-    if not request.is_ajax():
+    if request.headers.get('x-requested-with') != 'XMLHttpRequest':
         return HttpResponseBadRequest("Cannot POST to this view without AJAX")
 
     form = VideoForm(
@@ -137,7 +137,7 @@ def edit(request, video_id, callback=None):
 def delete(request, video_id):
     video = get_object_or_404(get_video_model(), id=video_id)
 
-    if not request.is_ajax():
+    if request.headers.get('x-requested-with') != 'XMLHttpRequest':
         return HttpResponseBadRequest("Cannot POST to this view without AJAX")
 
     video.delete()

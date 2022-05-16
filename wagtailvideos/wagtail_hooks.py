@@ -1,8 +1,8 @@
-from django.conf.urls import include, url
+from django.conf.urls import include
 from django.templatetags.static import static
-from django.urls import reverse
+from django.urls import path, reverse
 from django.utils.html import format_html
-from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import gettext_lazy as _
 from wagtail.admin.edit_handlers import InlinePanel
 from wagtail.admin.menu import Menu, MenuItem, SubmenuMenuItem
 from wagtail.admin.search import SearchArea
@@ -43,7 +43,7 @@ if is_modeladmin_installed():
 @hooks.register('register_admin_urls')
 def register_admin_urls():
     return [
-        url(r'^videos/', include(urls)),
+        path('videos/', include(urls)),
     ]
 
 
